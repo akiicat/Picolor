@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pallets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Colors count</th>
+      <th>Colors</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pallets.each do |pallet| %>
+      <tr>
+        <td><%= pallet.user.username %></td>
+        <td><%= pallet.title %></td>
+        <td><%= pallet.description %></td>
+        <td><%= pallet.colors_count %></td>
+        <td><%= pallet.colors %></td>
+        <td><%= link_to 'Show', pallet %></td>
+        <td><%= link_to 'Edit', edit_pallet_path(pallet) %></td>
+        <td><%= link_to 'Destroy', pallet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pallet', new_pallet_path %>

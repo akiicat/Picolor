@@ -1,0 +1,37 @@
+<%= form_for(pallet) do |f| %>
+  <% if pallet.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(pallet.errors.count, "error") %> prohibited this pallet from being saved:</h2>
+
+      <ul>
+      <% pallet.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :colors_count %>
+    <%= f.number_field :colors_count %>
+  </div>
+
+  <div class="field">
+    <%= f.label :colors %>
+    <%= f.text_field :colors %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
