@@ -17,8 +17,9 @@
   <tbody>
     <% @pallets.each do |pallet| %>
       <tr>
-        <td><%= pallet.user.username %></td>
+        <td><%= pallet.painter.username %></td>
         <td><%= pallet.title %></td>
+        <td><%= pallet.image_url %></td>
         <td><%= pallet.description %></td>
         <td><%= pallet.colors_count %></td>
         <td><%= pallet.colors %></td>

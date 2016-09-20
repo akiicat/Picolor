@@ -1,8 +1,51 @@
+<%#- Slider main container %>
+<div class="swiper-container">
+    <%#- Additional required wrapper %>
+    <div class="swiper-wrapper">
+        <%#- Slides %>
+        <% if @pallet.image_url.present? %>
+          <div class="swiper-slide wd-100">
+            <%= image_tag(@pallet.image_url, class: "center") %>
+          </div>
+        <% end %>
+
+        <% @pallet.colors.split(" ").each do |pallet| %>
+          <div class="swiper-slide wd-20"  style="background-color: <%= pallet %>;">
+            <%= pallet %>
+          </div>
+        <% end %>
+
+        <% bobbles = (5 - @pallet.colors_count) %>
+        <% bobbles.times do %>
+          <div class="swiper-slide wd-20"  style="background-color: #ffffff;">
+            bobble
+          </div>
+        <% end %>
+    </div>
+    <%#- If we need pagination %>
+    <div class="swiper-pagination"></div>
+
+    <%#- If we need navigation buttons %>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <%#- If we need scrollbar
+      <div class="swiper-scrollbar"></div> 
+    %>
+</div>
+
+
+
 <p id="notice"><%= notice %></p>
 
 <p>
   <strong>Title:</strong>
   <%= @pallet.title %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @pallet.image_url %>
 </p>
 
 <p>
@@ -20,7 +63,6 @@
   <%= @pallet.colors %>
 </p>
 
-
 <div>
   <input class="ink" type="color" id="colorChoice">
   <div class="bottle">
@@ -28,19 +70,6 @@
   </div>
   <div class="label">Nothing</div>
 </div>
-
-<script type="text/javascript">
-
-  var n_match  = ntc.name("#6195ED");
-  n_rgb        = n_match[0]; // RGB value of closest match
-  n_name       = n_match[1]; // Text string: Color name
-  n_exactmatch = n_match[2]; // True if exact color match
-
-  console.log(n_match);
-
-</script>
-
-
 
 </head>
 <%= link_to 'Edit', edit_pallet_path(@pallet) %> |
