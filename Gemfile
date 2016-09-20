@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# bootstrap https://github.com/twbs/bootstrap-sass
+gem 'bootstrap-sass', '~> 3.3.6'
 # AP
 gem 'awesome_print'
 # User login
