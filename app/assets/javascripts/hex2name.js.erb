@@ -2,11 +2,12 @@ $(document).ready(function(){
   $('.ink').change(function (){
     var hex         = $(this).val();
 
+    console.log(hex);
     // validate hex
 
     var n_match     = ntc.name(hex);
 
     $(this).parent().children(".bottle").children("img").css("background-color", hex);
-    $(this).parent().children(".label").text(n_match[1]);
+    $(this).parent().children(".label").text(hex.toUpperCase());
   });
 });
