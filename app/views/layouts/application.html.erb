@@ -2,18 +2,18 @@
 <html>
   <head>
     <title>Picolor</title>
-    <%= csrf_meta_tags %>
-
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js' %>
+    <%= render partial: "feature/tags" %>
   </head>
 
   <body>
     <ul class="hmenu">
-      <%= render 'users/menu/registration_items' %>
-      <%= render 'users/menu/login_items' %>
+      <%= render 'painters/menu/registration_items' %>
+      <%= render 'painters/menu/login_items' %>
     </ul>
+    app
     <%= yield %>
+    <hr/>
+    <div>reserve</div>
+    <p>Database: <% ActiveRecord::Base.configurations %> </p>
   </body>
 </html>

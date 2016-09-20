@@ -1,6 +1,8 @@
 class PalletsController < ApplicationController
+  layout 'pallet'
+
   before_action :set_pallet, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :authenticate_painter!
 
   # GET /pallets
   # GET /pallets.json
@@ -26,7 +28,7 @@ class PalletsController < ApplicationController
   # POST /pallets.json
   def create
     @pallet = Pallet.new(pallet_params)
-    @pallet.user_id = current_user.id
+    @pallet.painter_id = current_painter.id
     byebug
     respond_to do |format|
       if @pallet.save
@@ -71,6 +73,6 @@ class PalletsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def pallet_params
-      params.require(:pallet).permit(:title, :description, :colors_count, :colors)
+      params.require(:pallet).permit(:title, :image_url, :description, :colors_count, :colors)
     end
 end

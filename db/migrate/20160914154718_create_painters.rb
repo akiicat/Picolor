@@ -1,6 +1,6 @@
-class CreateUsers < ActiveRecord::Migration[5.0]
+class CreatePainters < ActiveRecord::Migration[5.0]
   def change
-    create_table :users, id: :uuid  do |t|
+    create_table :painters, id: :uuid  do |t|
       # username
       t.string :username
 

@@ -10,23 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160915083525) do
+ActiveRecord::Schema.define(version: 20160918215023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "pallets", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.uuid     "user_id"
-    t.string   "title"
-    t.string   "description"
-    t.integer  "colors_count"
-    t.string   "colors"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+  create_table "painters", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string   "username"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
@@ -47,10 +37,21 @@ ActiveRecord::Schema.define(version: 20160915083525) do
     t.integer  "failed_attempts",        default: 0,  null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
-    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
+    t.index ["confirmation_token"], name: "index_painters_on_confirmation_token", unique: true, using: :btree
+    t.index ["email"], name: "index_painters_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_painters_on_reset_password_token", unique: true, using: :btree
+    t.index ["unlock_token"], name: "index_painters_on_unlock_token", unique: true, using: :btree
+  end
+
+  create_table "pallets", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "painter_id"
+    t.string   "image_url"
+    t.string   "title"
+    t.string   "description"
+    t.integer  "colors_count"
+    t.string   "colors"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
 end

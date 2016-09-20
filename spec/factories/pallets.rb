@@ -8,6 +8,6 @@ FactoryGirl.define do
     description "the description of this pallet."
     colors_count 10
     colors "#000000"
-    user
+    painter
   end
 end

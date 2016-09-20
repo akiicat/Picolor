@@ -1,0 +1,5 @@
+<% if painter_signed_in? %>
+  <%= link_to('Edit registration', edit_painter_registration_path) %>
+<% else %>
+  <%= link_to('Register', new_painter_registration_path)  %>
+<% end %>
