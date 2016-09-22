@@ -1,76 +1,43 @@
-<%#- Slider main container %>
-<div class="swiper-container">
-    <%#- Additional required wrapper %>
-    <div class="swiper-wrapper">
-        <%#- Slides %>
-        <% if @pallet.image_url.present? %>
-          <div class="swiper-slide wd-100">
-            <%= image_tag(@pallet.image_url, class: "center") %>
-          </div>
-        <% end %>
+<%= render :partial => 'swiper', locals: {pallet: @pallet} %>
 
-        <% @pallet.colors.split(" ").each do |pallet| %>
-          <div class="swiper-slide wd-20"  style="background-color: <%= pallet %>;">
-            <%= pallet %>
-          </div>
-        <% end %>
+<div class="container">
 
-        <% bobbles = (5 - @pallet.colors_count) %>
-        <% bobbles.times do %>
-          <div class="swiper-slide wd-20"  style="background-color: #ffffff;">
-            bobble
-          </div>
-        <% end %>
+  <p id="notice"><%= notice %></p>
+
+  <p>
+    <strong>Title:</strong>
+    <%= @pallet.title %>
+  </p>
+
+  <p>
+    <strong>Image:</strong>
+    <%= @pallet.image_url %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= @pallet.description %>
+  </p>
+
+  <p>
+    <strong>Colors count:</strong>
+    <%= @pallet.colors_count %>
+  </p>
+
+  <p>
+    <strong>Colors:</strong>
+    <%= @pallet.colors %>
+  </p>
+
+  <div>
+    <input class="ink" type="color" id="colorChoice">
+    <div class="bottle">
+      <%= image_tag("inkBottle.svg") %>
     </div>
-    <%#- If we need pagination %>
-    <div class="swiper-pagination"></div>
-
-    <%#- If we need navigation buttons %>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-
-    <%#- If we need scrollbar
-      <div class="swiper-scrollbar"></div> 
-    %>
-</div>
-
-
-
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Title:</strong>
-  <%= @pallet.title %>
-</p>
-
-<p>
-  <strong>Image:</strong>
-  <%= @pallet.image_url %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @pallet.description %>
-</p>
-
-<p>
-  <strong>Colors count:</strong>
-  <%= @pallet.colors_count %>
-</p>
-
-<p>
-  <strong>Colors:</strong>
-  <%= @pallet.colors %>
-</p>
-
-<div>
-  <input class="ink" type="color" id="colorChoice">
-  <div class="bottle">
-    <%= image_tag("inkBottle.svg") %>
+    <div class="label">Nothing</div>
   </div>
-  <div class="label">Nothing</div>
+
 </div>
 
-</head>
 <%= link_to 'Edit', edit_pallet_path(@pallet) %> |
 <%= link_to 'Back', pallets_path %>

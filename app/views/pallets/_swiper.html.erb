@@ -1,0 +1,35 @@
+<%#- Slider main container %>
+<div class="swiper-container">
+    <%#- Additional required wrapper %>
+    <div class="swiper-wrapper">
+        <%#- Slides %>
+        <% if pallet.image_url.present? %>
+          <div class="swiper-slide wd-100">
+            <%= image_tag(pallet.image_url, class: "center") %>
+          </div>
+        <% end %>
+
+        <% pallet.colors.split(" ").each do |color_hex| %>
+          <div class="swiper-slide wd-20"  style="background-color: <%= color_hex %>;">
+            <%= color_hex %>
+          </div>
+        <% end %>
+
+        <% bobbles = (5 - pallet.colors_count) %>
+        <% bobbles.times do %>
+          <div class="swiper-slide wd-20"  style="background-color: #ffffff;">
+            bobble
+          </div>
+        <% end %>
+    </div>
+    <%#- If we need pagination %>
+    <div class="swiper-pagination"></div>
+
+    <%#- If we need navigation buttons %>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <%#- If we need scrollbar
+      <div class="swiper-scrollbar"></div>
+    %>
+</div>
