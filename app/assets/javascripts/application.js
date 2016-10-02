@@ -10,9 +10,15 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+// order swiper.minjquery.min -> swiper.min
+//= require swiper.jquery.min
+//= require swiper.min
+//
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
+//= require jquery.ui.sortable-animation
 //= require turbolinks
+//= require ntc
 //= require_tree .
 //= require bootstrap-sprockets
-//= require swiper-jquery

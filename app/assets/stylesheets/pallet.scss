@@ -21,12 +21,15 @@
 // overwrite custom swiper setting
 .swiper-container {
   width: 100%;
-  height: 600px;
+  height: 800px;
+  background-color: #0b0c0e;
 
-  @for $i from 1 through 5 {
-    .wd-#{$i * 20} {
-      width: #{$i * 20%};
-    }
+  .card-image {
+    width: 100%;
+  }
+
+  .card-color {
+    width: 20%;
   }
 
   img.center {
@@ -34,7 +37,23 @@
     display: block;
     margin: 0 auto;
   }
+
+  .label-wrapper {
+    position: absolute;
+    bottom: 7%;
+    width: 100%;
+    & > div {
+      font-size: 36px;
+    }
+
+    .label-hex {
+      font-family: "Gotham Rounded A", "Gotham Rounded B", sans-serif;
+      font-weight: 500;
+    }
+  }
 }
+
+
 
 
 // overwrite bootstrap navbar margin

@@ -1,35 +1,75 @@
+<script>
+$(document).ready(function(){
+
+  function swiper_resize() {
+    var swiper_height = $(this).height() - 252;
+    $('.swiper-container').height(swiper_height);
+  }
+
+  $( window ).resize(swiper_resize());
+  $( window ).ready(swiper_resize());
+
+  $('.card-color').each(function() {
+    var hex = $(this).children(".ink").first().val().toUpperCase();
+    console.log(hex);
+    $(this).css("background-color", hex);
+    $(this).find(".label-hex").text(hex);
+  });
+
+  $('.label-hex').mouseover(function (){
+    var text_color  = $(this).css("color");
+
+    var hex         = $(this).text();
+
+    //console.log(text_color);
+    console.log(hex);
+    // validate hex
+
+    //var n_match     = ntc.name(hex);
+
+    //$(this).parent().children(".bottle").children("img").css("background-color", hex);
+    //$(this).parent().children(".label").text(hex.toUpperCase());
+  });
+});
+</script>
+
 <%#- Slider main container %>
 <div class="swiper-container">
     <%#- Additional required wrapper %>
-    <div class="swiper-wrapper">
+    <div id='sortableList' class="swiper-wrapper">
         <%#- Slides %>
         <% if pallet.image_url.present? %>
-          <div class="swiper-slide wd-100">
+          <div class="swiper-slide card-image">
             <%= image_tag(pallet.image_url, class: "center") %>
           </div>
         <% end %>
 
         <% pallet.colors.split(" ").each do |color_hex| %>
-          <div class="swiper-slide wd-20"  style="background-color: <%= color_hex %>;">
-            <%= color_hex %>
+          <div class="swiper-slide card-color">
+            <input class="ink" type="color" style="display: none;" value="<%= color_hex %>"/>
+            <div class="label-wrapper swiper-no-swiping text-center">
+              <div class="label-swiper">
+                <span class="swiper-draggable glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>
+              </div>
+              <div class="label-hex"></div>
+            </div>
           </div>
         <% end %>
 
         <% bobbles = (5 - pallet.colors_count) %>
         <% bobbles.times do %>
-          <div class="swiper-slide wd-20"  style="background-color: #ffffff;">
+          <div class="swiper-slide card-color" style="background-color: #ffffff;">
             bobble
           </div>
         <% end %>
     </div>
-    <%#- If we need pagination %>
-    <div class="swiper-pagination"></div>
+    <%#- If we need pagination
+    <div class="swiper-pagination"></div> %>
 
-    <%#- If we need navigation buttons %>
+    <%#- If we need navigation buttons
     <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <div class="swiper-button-next"></div> %>
 
     <%#- If we need scrollbar
-      <div class="swiper-scrollbar"></div>
-    %>
+    <div class="swiper-scrollbar"></div> %>
 </div>

@@ -29,15 +29,22 @@
     <%= @pallet.colors %>
   </p>
 
-  <div>
-    <input class="ink" type="color" id="colorChoice">
-    <div class="bottle">
-      <%= image_tag("inkBottle.svg") %>
+
+  <% @pallet.colors.split(" ").each do |color_hex| %>
+    <div>
+      <input class="ink-water" type="color" id="colorChoice" value="<%= color_hex %>"/>
+      <div class="ink-well" style="background-color: <%= color_hex %>">
+        <%= image_tag("inkBottle.svg", :style => "width: 25%;") %>
+      </div>
     </div>
-    <div class="label">Nothing</div>
-  </div>
+  <% end %>
+
 
 </div>
 
 <%= link_to 'Edit', edit_pallet_path(@pallet) %> |
 <%= link_to 'Back', pallets_path %>
+
+<script>
+
+</script>
