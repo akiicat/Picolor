@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# drag image to upload
+#gem 'imgurapi'
 # bootstrap https://github.com/twbs/bootstrap-sass
 gem 'bootstrap-sass', '~> 3.3.6'
 # AP
