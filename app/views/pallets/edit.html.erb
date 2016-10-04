@@ -1,6 +1,176 @@
-<h1>Editing Pallet</h1>
 
-<%= render 'form', pallet: @pallet %>
+<style>
+.grad1 {
+    height: 500px;
+    background: -webkit-linear-gradient(left, rgba(255,0,0,0), rgba(255,0,0,1)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(0,0,0,0), rgba(0,0,0,1)); /* Standard syntax (must be last) */
+}
+
+.grad2 {
+
+    height: 500px;
+    background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet); /* For Fx 3.6 to 15 */
+    background: linear-gradient(to right, #FF0000, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000); /* Standard syntax (must be last) */
+}
+
+.pointer {
+  background-color: red;
+}
+
+.pointer .round {
+  display: block;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  left: -9px;
+  top: -9px;
+  background-color: #fff;
+  border-radius: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#dropzone {
+    position: relative;
+    border: 5px dotted #000;
+    border-radius: 10px;
+    color: #000;
+    font: bold 24px/200px arial;
+    height: 200px;
+    margin: 30px auto;
+    text-align: center;
+    width: 200px;
+}
+
+</style>
+
+<script>
+var pathname = window.location.pathname; // Returns path only
+var url      = window.location.href;     // Returns full URL
+console.log(pathname);
+console.log(url);
+
+
+$(document).ready(function(){
+  $('.pointer').draggable({
+    containment: '#picolor-wrapper',
+    drag: function( event, ui ){
+      console.log(ui.position.left, ui.position.top, $('.grad2').css('width'), $('.grad2').css('height'));
+    }
+  });
+});
+
+function windowResize(){
+  var width = $('#left-bar').width() * 1.0;
+  var height = $(window).height() * 1.0 - 52;
+  //$('#left-bar').width(width);
+  $('#left-bar').height(height);
+  console.log(width, height);
+
+  // picolor canvas margin center
+  var canvasMgTop = (height - width * 0.625) / 2;
+  //$('#canvas-container').css('margin-top', canvasMgTop);
+}
+
+function imgurUpload(urlPath){
+  var link = '';
+  $.ajax({
+    url: 'https://api.imgur.com/3/image',
+    headers: {
+      'Authorization': 'Client-ID 2ee14aa7e5c81e6'
+    },
+    type: 'POST',
+    data: {
+      'image': urlPath
+    },
+    success: function(response) {
+      link = response.data.link;
+      console.log(response.data.link);
+    }
+  });
+  return link;
+};
+
+$(document).ready(function(){
+  // var link = '';
+  // $("div#myId").dropzone({
+  //   url: 'https://api.imgur.com/3/image',
+  //   headers: {
+  //     'Authorization': 'Client-ID 2ee14aa7e5c81e6'
+  //   },
+  //   type: 'POST',
+  //   data: {
+  //     'image': urlPath
+  //   },
+  //   success: function(response) {
+  //     link = response.data.link;
+  //     console.log(response.data.link);
+  //   }
+  // });
+
+  var dropzone = $("#dropzone"),
+	input = dropzone.find('input');
+
+  dropzone.on({
+  	dragenter : dragin,
+  	dragleave : dragout
+  });
+
+  input.on('change', drop);
+
+  function dragin(e) { //function for drag into element, just turns the bix X white
+    $(dropzone).addClass('hover');
+  }
+
+  function dragout(e) { //function for dragging out of element
+    $(dropzone).removeClass('hover');
+  }
+
+  function drop(e) {
+    var file = this.files[0];
+
+    $('#dropzone').removeClass('hover').addClass('dropped').find('img').remove();
+
+      // upload file here
+    showfile(file); // showing file for demonstration ...
+  }
+
+  function showfile(file) {
+  	var reader = new FileReader(file);
+      reader.readAsDataURL(file);
+
+      reader.onload = function(e) {
+        $('#dropzone div').html($('<img />').attr('src', e.target.result).fadeIn());
+      }
+  }
+
+});
+
+
+</script>
+
+
+<div id='left-bar' class='col-lg-8' style='background-color: #333333;'>
+  <span class="pointer">
+    <span class="round"></span>
+  </span>
+  <div id="picolor-wrapper" style='display: table; margin: 0 auto; '>
+    <div id="canvas-container">
+      <canvas id="canvas-layer-1">
+      </canvas>
+    </div>
+  </div>
+  <div id="dropzone">
+      <div>dropzone</div>
+      <input type="file" />
+  </div>
+</div>
+<div class='col-lg-4' style='background-color: gray'>
+  <%= render 'form', pallet: @pallet %>
+</div>
 
 <%= link_to 'Show', @pallet %> |
 <%= link_to 'Back', pallets_path %>
