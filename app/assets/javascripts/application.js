@@ -18,6 +18,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.ui.sortable-animation
+//= require dropzone
 //= require turbolinks
 //= require ntc
 //= require_tree .
