@@ -33,17 +33,6 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-#dropzone {
-    position: relative;
-    border: 5px dotted #000;
-    border-radius: 10px;
-    color: #000;
-    font: bold 24px/200px arial;
-    height: 200px;
-    margin: 30px auto;
-    text-align: center;
-    width: 200px;
-}
 
 </style>
 
@@ -67,7 +56,7 @@ function windowResize(){
   var width = $('#left-bar').width() * 1.0;
   var height = $(window).height() * 1.0 - 52;
   //$('#left-bar').width(width);
-  $('#left-bar').height(height);
+  //$('#left-bar').height(height);
   console.log(width, height);
 
   // picolor canvas margin center
@@ -75,100 +64,102 @@ function windowResize(){
   //$('#canvas-container').css('margin-top', canvasMgTop);
 }
 
-function imgurUpload(urlPath){
-  var link = '';
-  $.ajax({
-    url: 'https://api.imgur.com/3/image',
-    headers: {
-      'Authorization': 'Client-ID 2ee14aa7e5c81e6'
-    },
-    type: 'POST',
-    data: {
-      'image': urlPath
-    },
-    success: function(response) {
-      link = response.data.link;
-      console.log(response.data.link);
-    }
-  });
-  return link;
-};
-
 $(document).ready(function(){
-  // var link = '';
-  // $("div#myId").dropzone({
-  //   url: 'https://api.imgur.com/3/image',
-  //   headers: {
-  //     'Authorization': 'Client-ID 2ee14aa7e5c81e6'
-  //   },
-  //   type: 'POST',
-  //   data: {
-  //     'image': urlPath
-  //   },
-  //   success: function(response) {
-  //     link = response.data.link;
-  //     console.log(response.data.link);
-  //   }
-  // });
-
-  var dropzone = $("#dropzone"),
-	input = dropzone.find('input');
-
-  dropzone.on({
-  	dragenter : dragin,
-  	dragleave : dragout
+  previewTemplate = $.trim($('#preview-template').html());
+  $("#dropzone").dropzone({
+    paramName: "image",
+    previewTemplate: previewTemplate,
+    thumbnailWidth: null,
+    thumbnailHeight: null,
+    method: "post",
+    url: "https://api.imgur.com/3/upload",
+    headers: {
+      Authorization: "Client-ID 2ee14aa7e5c81e6",
+      'Cache-Control': null,
+      'X-Requested-With': null
+    },
+    dragenter : dragin,
+    dragleave : dragout,
+    drop: dragdrop,
+    processing: uploadProcess,
+    success: uploadSuccess,
+    // addedfile: function(file) {
+    // }
   });
-
-  input.on('change', drop);
-
   function dragin(e) { //function for drag into element, just turns the bix X white
+    console.log(e);
     $(dropzone).addClass('hover');
   }
 
   function dragout(e) { //function for dragging out of element
+    console.log(e);
     $(dropzone).removeClass('hover');
   }
 
-  function drop(e) {
-    var file = this.files[0];
-
-    $('#dropzone').removeClass('hover').addClass('dropped').find('img').remove();
-
-      // upload file here
-    showfile(file); // showing file for demonstration ...
+  function dragdrop(e) {
+    //console.log(e.toElement.src);
+    $(dropzone).children('.dz-preview').remove();
+    $(dropzone).removeClass('hover');
   }
 
-  function showfile(file) {
-  	var reader = new FileReader(file);
-      reader.readAsDataURL(file);
-
-      reader.onload = function(e) {
-        $('#dropzone div').html($('<img />').attr('src', e.target.result).fadeIn());
-      }
+  function uploadProcess() {
+    $(dropzone).children('.dz-success').html('');
   }
 
+  function uploadSuccess(file, response) {
+    console.log(response);
+    console.log(response.data.link);
+    code = response.status;
+    link = response.data.link;
+
+    console.log(file);
+    console.log(file.name);
+
+    var img = '<div class="card-image">' +
+              '<img src="' + link + '" alt="' + code + '"/></div>';
+
+    $('.col-lg-4').append(img)
+    $(dropzone).children('.dz-success').html(img);
+
+    $('.col-lg-4 img').css('width', '100%');
+    $('.col-lg-8 img').addClass('dz-image');
+    console.log(img);
+  }
 });
-
-
 </script>
 
 
-<div id='left-bar' class='col-lg-8' style='background-color: #333333;'>
+<div id='left-bar' class='col-lg-8'>
   <span class="pointer">
     <span class="round"></span>
   </span>
+
+
+  <div id="dropzone" class="">
+    <div class="fallback">
+      <input id='myFile' name="file" type="image" multiple/>
+    </div>
+
+    <div class='dz-success'>
+      <img class='dz-image'/>
+    </div>
+
+    <div id="preview-template" style="display: none;">
+      <div class="dz-preview">
+        <img class="dz-image" data-dz-thumbnail />
+        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+      </div>
+    </div>
+  </div>
+
   <div id="picolor-wrapper" style='display: table; margin: 0 auto; '>
     <div id="canvas-container">
       <canvas id="canvas-layer-1">
       </canvas>
     </div>
   </div>
-  <div id="dropzone">
-      <div>dropzone</div>
-      <input type="file" />
-  </div>
 </div>
-<div class='col-lg-4' style='background-color: gray'>
+<div class='col-lg-4'>
   <%= render 'form', pallet: @pallet %>
 </div>
 

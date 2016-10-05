@@ -47,16 +47,75 @@
     }
 
     .label-hex {
+      text-transform: uppercase;
       font-family: "Gotham Rounded A", "Gotham Rounded B", sans-serif;
       font-weight: 500;
     }
   }
 }
 
+.row1 {
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  padding: 20px 0px;
+}
 
 
 
 // overwrite bootstrap navbar margin
 .navbar {
   margin-bottom: 0px;
+}
+
+#dropzone {
+  position: relative;
+  //border: 5px dotted #000;
+  //border-radius: 10px;
+  color: #000;
+  font: bold 24px/128px arial;
+  margin: 30px auto;
+  //text-align: center;
+  background-color: #555555;
+
+  width: 100%;
+  height: 400px;
+
+
+  // drag in out
+  &.hover {
+  	background-color: #e3e3e3;
+  }
+
+  // progress bar
+  .dz-upload {
+    background-color: #eeeeee;
+    position: absolute;
+    height: 10px;
+    width: 100%;
+  }
+
+  %dz-img-overlay {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
+
+  & .dz-preview {
+    @extend %dz-img-overlay;
+    z-index: 1;
+  }
+
+  & .dz-success {
+    @extend %dz-img-overlay;
+    z-index: 0;
+  }
+
+  & .dz-image {
+    width: 100%;
+  }
+}
+
+.card-image {
+  box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.2),0px 6px 15px 0 rgba(0,0,0,0.15);
 }
