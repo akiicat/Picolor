@@ -1,16 +1,8 @@
 <script>
+
 $(document).ready(function(){
-
-  function swiper_resize() {
-    var swiper_height = $(this).height() - 252;
-    $('.swiper-container').height(swiper_height);
-  }
-
-  $( window ).resize(swiper_resize());
-  $( window ).ready(swiper_resize());
-
   $('.card-color').each(function() {
-    var hex = $(this).children(".ink").first().val().toUpperCase();
+    var hex = $(this).children(".ink").first().val();
     console.log(hex);
     $(this).css("background-color", hex);
     $(this).find(".label-hex").text(hex);
@@ -31,6 +23,16 @@ $(document).ready(function(){
     //$(this).parent().children(".label").text(hex.toUpperCase());
   });
 });
+
+function swiper_resize() {
+  var swiper_height = $(window).height() - 250;
+  $('.swiper-container').height(swiper_height);
+  console.log($(window).height());
+}
+
+$(document).ready(swiper_resize);
+$(window).resize(swiper_resize);
+
 </script>
 
 <%#- Slider main container %>
