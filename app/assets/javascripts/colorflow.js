@@ -3,11 +3,7 @@ function initialize() {
   var mySwiper = new Swiper ('.swiper-container', {
     // Optional parameters
     direction: 'horizontal',
-    //loop: true,
-    //draggable: true,
     spaceBetween: 0,
-
-    //centeredSlides: true,
 
     //pagination: '.swiper-pagination',
     //paginationClickable: true,
@@ -21,17 +17,11 @@ function initialize() {
   })
 
   $('#sortableList').sortable({
-    //refreshPositions: true,
     handle: '.swiper-draggable',
     cancel: '',
-    //distance: 5,
     axis: "x",
     //animation: 200,
-    //opacity: 0.6,
-    //scroll: true,
-    //containment: 'parent',
     placeholder: 'swiper-slide card-color',
-    //tolerance: 'pointer'
 
   }).disableSelection();
 }
