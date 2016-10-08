@@ -1,140 +1,4 @@
-
-<style>
-.grad1 {
-    height: 500px;
-    background: -webkit-linear-gradient(left, rgba(255,0,0,0), rgba(255,0,0,1)); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(right, rgba(255,0,0,0), rgba(255,0,0,1)); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(0,0,0,0), rgba(0,0,0,1)); /* Standard syntax (must be last) */
-}
-
-.grad2 {
-
-    height: 500px;
-    background: -webkit-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(left, red, orange, yellow, green, blue, indigo, violet); /* For Fx 3.6 to 15 */
-    background: linear-gradient(to right, #FF0000, #FFFF00, #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000); /* Standard syntax (must be last) */
-}
-
-.pointer {
-  background-color: red;
-}
-
-.pointer .round {
-  display: block;
-  position: relative;
-  width: 18px;
-  height: 18px;
-  left: -9px;
-  top: -9px;
-  background-color: #fff;
-  border-radius: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-
-</style>
-
-<script>
-var pathname = window.location.pathname; // Returns path only
-var url      = window.location.href;     // Returns full URL
-console.log(pathname);
-console.log(url);
-
-
-$(document).ready(function(){
-  $('.pointer').draggable({
-    containment: '#picolor-wrapper',
-    drag: function( event, ui ){
-      console.log(ui.position.left, ui.position.top, $('.grad2').css('width'), $('.grad2').css('height'));
-    }
-  });
-});
-
-function windowResize(){
-  var width = $('#left-bar').width() * 1.0;
-  var height = $(window).height() * 1.0 - 52;
-  //$('#left-bar').width(width);
-  //$('#left-bar').height(height);
-  console.log(width, height);
-
-  // picolor canvas margin center
-  var canvasMgTop = (height - width * 0.625) / 2;
-  //$('#canvas-container').css('margin-top', canvasMgTop);
-}
-
-$(document).ready(function(){
-  previewTemplate = $.trim($('#preview-template').html());
-  $("#dropzone").dropzone({
-    paramName: "image",
-    previewTemplate: previewTemplate,
-    thumbnailWidth: null,
-    thumbnailHeight: null,
-    method: "post",
-    url: "https://api.imgur.com/3/upload",
-    headers: {
-      Authorization: "Client-ID 2ee14aa7e5c81e6",
-      'Cache-Control': null,
-      'X-Requested-With': null
-    },
-    dragenter : dragin,
-    dragleave : dragout,
-    drop: dragdrop,
-    processing: uploadProcess,
-    success: uploadSuccess,
-    // addedfile: function(file) {
-    // }
-  });
-  function dragin(e) { //function for drag into element, just turns the bix X white
-    console.log(e);
-    $(dropzone).addClass('hover');
-  }
-
-  function dragout(e) { //function for dragging out of element
-    console.log(e);
-    $(dropzone).removeClass('hover');
-  }
-
-  function dragdrop(e) {
-    //console.log(e.toElement.src);
-    $(dropzone).children('.dz-preview').remove();
-    $(dropzone).removeClass('hover');
-  }
-
-  function uploadProcess() {
-    $(dropzone).children('.dz-success').html('');
-  }
-
-  function uploadSuccess(file, response) {
-    console.log(response);
-    console.log(response.data.link);
-    code = response.status;
-    link = response.data.link;
-
-    console.log(file);
-    console.log(file.name);
-
-    var img = '<div class="card-image">' +
-              '<img src="' + link + '" alt="' + code + '"/></div>';
-
-    $('.col-lg-4').append(img)
-    $(dropzone).children('.dz-success').html(img);
-
-    $('.col-lg-4 img').css('width', '100%');
-    $('.col-lg-8 img').addClass('dz-image');
-    console.log(img);
-  }
-});
-</script>
-
-
 <div id='left-bar' class='col-lg-8'>
-  <span class="pointer">
-    <span class="round"></span>
-  </span>
-
-
   <div id="dropzone" class="">
     <div class="fallback">
       <input id='myFile' name="file" type="image" multiple/>
@@ -151,17 +15,11 @@ $(document).ready(function(){
       </div>
     </div>
   </div>
+</div>
+<div id='right-bar' class='col-lg-4'>
+</div>
 
-  <div id="picolor-wrapper" style='display: table; margin: 0 auto; '>
-    <div id="canvas-container">
-      <canvas id="canvas-layer-1">
-      </canvas>
-    </div>
-  </div>
-</div>
-<div class='col-lg-4'>
-  <%= render 'form', pallet: @pallet %>
-</div>
+<%= render 'form', pallet: @pallet %>
 
 <%= link_to 'Show', @pallet %> |
 <%= link_to 'Back', pallets_path %>

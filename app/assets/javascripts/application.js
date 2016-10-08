@@ -19,7 +19,7 @@
 //= require jquery-ui
 //= require jquery.ui.sortable-animation
 //= require dropzone
-//= require turbolinks
 //= require ntc
+//= require turbolinks
 //= require_tree .
 //= require bootstrap-sprockets
