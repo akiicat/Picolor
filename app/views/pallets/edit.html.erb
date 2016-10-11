@@ -1,22 +1,36 @@
 <div id='left-bar' class='col-lg-8'>
-  <div id="dropzone" class="">
+  <button id="clickable">Click me to select files</button>
+  <div id='dropzone' class=''>
     <div class="fallback">
-      <input id='myFile' name="file" type="image" multiple/>
+      <input id='myFile' name='file' type='image' multiple/>
     </div>
 
-    <div class='dz-success'>
-      <img class='dz-image'/>
+    <div id='dz-upload'>
+      <%= image_tag('cloud-storage-uploading-option.svg', class: 'dz-preloader') %>
     </div>
 
-    <div id="preview-template" style="display: none;">
-      <div class="dz-preview">
-        <img class="dz-image" data-dz-thumbnail />
-        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-      </div>
+    <div id='dz-canvas'></div>
+
+    <div id='dz-preview' class='dz-preview'>
+      <%= image_tag('preloader.svg', class: 'dz-preloader') %>
     </div>
   </div>
 </div>
-<div id='right-bar' class='col-lg-4'>
+<div id='right-bar' class='col-lg-4' style='height: 800px; overflow: scroll;'>
+  <div>add card</div>
+
+  <% JSON.parse(@pallet.image_url).each do |url| %>
+    <% id = url.split('/')[-1] %>
+    <% dataurl = '' %>
+    <%# Base64.encode64(open(url) { |io| dataurl = io.read }) %>
+    <div id="card-<%= id %>" class='card-image card-small' data-id="<%= id %>" data-url="<%= url %>" src="<%= dataurl %>">
+    </div>
+  <% end %>
+
+  <% @pallet.colors.split(" ").each do |color_hex| %>
+    <div class='row' style="margin-top: 50px; height: 100px; background-color: <%= color_hex %>;">
+    </div>
+  <% end %>
 </div>
 
 <%= render 'form', pallet: @pallet %>

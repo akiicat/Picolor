@@ -1,79 +1,74 @@
-var pathname = window.location.pathname; // Returns path only
-var url      = window.location.href;     // Returns full URL
-console.log(pathname);
-console.log(url);
-
-function windowResize(){
-  var width = $('#left-bar').width() * 1.0;
-  var height = $(window).height() * 1.0 - 52;
-  //$('#left-bar').width(width);
-  //$('#left-bar').height(height);
-  console.log(width, height);
-
-  // picolor canvas margin center
-  var canvasMgTop = (height - width * 0.625) / 2;
-  //$('#canvas-container').css('margin-top', canvasMgTop);
-}
+var canvas_hash = new Object();
+var canvas_test = new Object();
 
 $(document).ready(function(){
-  previewTemplate = $.trim($('#preview-template').html());
-  $("#dropzone").dropzone({
-    paramName: "image",
-    previewTemplate: previewTemplate,
-    thumbnailWidth: null,
-    thumbnailHeight: null,
-    method: "post",
-    url: "https://api.imgur.com/3/upload",
-    headers: {
-      Authorization: "Client-ID 2ee14aa7e5c81e6",
-      'Cache-Control': null,
-      'X-Requested-With': null
-    },
-    dragenter : dragin,
-    dragleave : dragout,
-    drop: dragdrop,
-    processing: uploadProcess,
-    success: uploadSuccess,
-    // addedfile: function(file) {
-    // }
+  $('[data-url][data-id]').each(function(){
+    var url = $(this).data('url');
+    var id  = $(this).data('id');
+
+    var _this = $(this);
+    loadImage(id, url, _this);
   });
-  function dragin(e) { //function for drag into element, just turns the bix X white
-    console.log(e);
-    $(dropzone).addClass('hover');
+
+  function loadImage(id, url, _this = null){
+    var img = new Image();
+    img.onload = function(){
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+
+      canvas.width = this.width;
+      canvas.height = this.height;
+
+      context.drawImage(this, 0, 0);
+
+      canvas_hash[id] = canvas.toDataURL();
+      canvas_test[id] = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+      _this.append(canvas);
+    };
+    img.crossOrigin = 'Anonymous';
+    img.src = url;
   }
 
-  function dragout(e) { //function for dragging out of element
-    console.log(e);
-    $(dropzone).removeClass('hover');
-  }
+  $('[data-url][data-id]').click(function(){
+    var id    = $(this).data('id');
+    var src   = canvas_hash[id];
+    var src2  = canvas_test[id];
 
-  function dragdrop(e) {
-    //console.log(e.toElement.src);
-    $(dropzone).children('.dz-preview').remove();
-    $(dropzone).removeClass('hover');
-  }
+    var canvas  = document.createElement('canvas');
+    var context = canvas.getContext('2d');
 
-  function uploadProcess() {
-    $(dropzone).children('.dz-success').html('');
-  }
+    var img = new Image();
+    img.src = src;
+    img.alt = 'hi';
+    img.onload = function(){
+      canvas.width = this.width;
+      canvas.height = this.height;
 
-  function uploadSuccess(file, response) {
-    console.log(response);
-    console.log(response.data.link);
-    code = response.status;
-    link = response.data.link;
+      context.drawImage(this, 0, 0);
+      console.log(this.width, this.height);
+    };
+    //console.log(img);
 
-    console.log(file);
-    console.log(file.name);
+    $('#dz-canvas').html(canvas);
 
-    var img = '<div class="card-image">' +
-              '<img src="' + link + '" alt="' + code + '"/></div>';
+    //console.log(id, src, src2, canvas);
+  });
 
-    $('.col-lg-4').append(img)
-    $(dropzone).children('.dz-success').html(img);
+  $("#dz-canvas").click(function(e) {
+    var canvas = $("#dz-canvas").children('canvas').get(0);
+    var ctx = canvas.getContext("2d");
 
-    $('.col-lg-4 img').css('width', '100%');
-    $('.col-lg-8 img').addClass('dz-image');
-    console.log(img);
-  }
-});
+    var canvasOffset = $(canvas).offset();
+    var canvasX = Math.floor(e.pageX - canvasOffset.left);
+    var canvasY = Math.floor(e.pageY - canvasOffset.top);
+
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var pixels = imageData.data;
+    var pixelRedIndex = ((canvasY - 1) * (imageData.width * 4)) + ((canvasX - 1) * 4);
+    var pixelcolor = "rgba("+pixels[pixelRedIndex]+", "+pixels[pixelRedIndex+1]+", "+pixels[pixelRedIndex+2]+", "+pixels[pixelRedIndex+3]+")";
+
+    $("body").css("backgroundColor", pixelcolor);
+    console.log('set bg color: ' + pixelcolor);
+  });
+})
