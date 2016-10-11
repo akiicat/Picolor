@@ -90,7 +90,8 @@
 }
 
 .card-image.card-small {
-  height: 20%;
+  //height: 20%;
+  height: 300px;
   canvas {
     cursor: pointer;
   }
@@ -102,5 +103,13 @@
   canvas {
     @extend %abs-center;
     box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.2),0px 6px 15px 0 rgba(0,0,0,0.15);
+  }
+}
+
+.right-bar {
+  height: 800px;
+  overflow: scroll;
+  .rb-container {
+    height: inherit;
   }
 }

@@ -16,21 +16,22 @@
     </div>
   </div>
 </div>
-<div id='right-bar' class='col-lg-4' style='height: 800px; overflow: scroll;'>
+<div id='right-bar' class='col-lg-4 right-bar'>
   <div>add card</div>
 
-  <% JSON.parse(@pallet.image_url).each do |url| %>
-    <% id = url.split('/')[-1] %>
-    <% dataurl = '' %>
-    <%# Base64.encode64(open(url) { |io| dataurl = io.read }) %>
-    <div id="card-<%= id %>" class='card-image card-small' data-id="<%= id %>" data-url="<%= url %>" src="<%= dataurl %>">
-    </div>
-  <% end %>
+  <div id='rb-images' class='rb-container'>
+    <% JSON.parse(@pallet.image_url).each_with_index do |url, index| %>
+      <div id="image-<%= index %>" class='card-image card-small' data-id="<%= index %>" data-url="<%= url %>">
+      </div>
+    <% end %>
+  </div>
 
-  <% @pallet.colors.split(" ").each do |color_hex| %>
-    <div class='row' style="margin-top: 50px; height: 100px; background-color: <%= color_hex %>;">
-    </div>
-  <% end %>
+  <div id='rb-colors' class='rb-container'>
+    <% @pallet.colors.split(" ").each do |color_hex| %>
+      <div class='row' style="height: 100px; background-color: <%= color_hex %>;">
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <%= render 'form', pallet: @pallet %>
