@@ -29,17 +29,16 @@ function farbtastic() {
   var sliderMask = $('#sliderMask');
 
   var colorHue = 0;
-  var colorWhite = 0;
+  var colorWhite = 1;
   var colorBlack = 0;
 
   var cardToggle = $('[data-color]');
   var cardCursor = null;
+  var cardNoRept = 0;
+  var cardCounter = 0;
 
   // start script
   colorInit();
-  printColorWheel();
-  printColorRect('#FF0000');
-
 
   $(window).resize(function(){
     colorInit();
@@ -71,59 +70,75 @@ function farbtastic() {
   });
 
   $('#rb-images').sortable({ delay: 70 });
-  $('#rb-colors').sortable({ delay: 70 });
+  $('#rb-colors').sortable({
+    delay: 70,
+    handle: ".handle"
+  });
 
   cardToggle.each(function(e){
-    var colorList = $('#rb-colors').sortable("toArray");
     var color = $(this).data('color');
-    var id    = 'card-' + $(this).data('id');
-    var card  = $('#rb-color-template').children().clone();
-    var dlt   = $(card.find('[data-delete-btn]').get(0));
-
-    // card, id, color, length
-    card.attr('id', id);
-    card.css('background-color', color);
-    dlt.attr('id', 'dlt-' + id);
-
-    $(this).replaceWith(card);
-    $('#'    +id).click(setColorCursor);
-    $('#dlt-'+id).click(dltColorCard);
-    $('#color-counter').html(colorList.length);
+    var anime = false
+    $(this).remove();
+    appendCard(color, anime);
   });
 
   $('#rb-append-color').click(function(){
-    var colorList = $('#rb-colors').sortable("toArray");
-    var color = 'rgb(' + Math.floor(Math.random() * 256) + ','
-                       + Math.floor(Math.random() * 256) + ','
-                       + Math.floor(Math.random() * 256) + ')';
-    var id    = 'card-' + colorList.length;
+    if(cardCursor != null) {
+      cardCursor.removeClass('selected');
+      cardCursor = null;
+    }
+    // random color
+    // var color = 'rgb(' + Math.floor(Math.random() * 256) + ','
+    //                    + Math.floor(Math.random() * 256) + ','
+    //                    + Math.floor(Math.random() * 256) + ')';
+
+    // now color
+    var hwb   = 'hwb('+colorHue+','+colorWhite+','+colorBlack+')';
+    var color = w3color(hwb).toRgbString();
+    appendCard(color);
+  });
+  // end script
+
+  // append color card to #rb-colors
+  function appendCard(color, anime = true) {
+    var color = w3color(color);
+    var id    = 'card-' + (++cardNoRept);
     var card  = $('#rb-color-template').children().clone();
-    var dlt = $(card.find('[data-delete-btn]').get(0));
+    var dlt   = $(card.find('[data-delete-btn]').get(0));
+    var hex   = $(card.find('[data-hex]').get(0));
 
     card.attr('id', id);
-    card.css('background-color', color);
+    card.css('background-color', color.toRgbString());
     dlt.attr('id', 'dlt-' + id);
+    hex.attr('id', 'hex-' + id);
+    hex.html(color.toHexString());
 
     $('#rb-colors').append(card);
     $('#rb-colors').sortable("refresh");
     $('#'    +id).click(setColorCursor);
     $('#dlt-'+id).click(dltColorCard);
 
-    $('#color-counter').html(colorList.length + 1);
-    $('#right-bar').animate({ scrollTop: $('#right-bar').prop("scrollHeight") }, 300);
+    cardCounter = $('#rb-colors').sortable("toArray").length;
+    $('#color-counter').html(cardCounter);
 
-
-  })
-  // end script
+    if(anime){
+      $('#right-bar').animate({ scrollTop: $('#right-bar').prop("scrollHeight") }, 240);
+    }
+  }
 
   // link to color card
   function setColorCursor() {
+    if(cardCursor != null) {
+      cardCursor.removeClass('selected');
+    }
     if (cardCursor != null && cardCursor.attr('id') === $(this).attr('id')) {
       cardCursor = null;
     }
     else {
       cardCursor = $(this);
+      $(this).addClass('selected');
       var bg     = w3color(cardCursor.css('background-color'));
+      var hex    = bg.toHexString();
 
       colorHue   = bg.hue;
       colorWhite = bg.whiteness;
@@ -137,8 +152,15 @@ function farbtastic() {
     console.log('csr', cardCursor);
   }
 
+  function setHexValue(id, hex) {
+    var hexID = 'hex-' + id;
+    $('#'+hexID).html(hex)
+  }
+
   //
   function dltColorCard() {
+    var id = $(this).attr('id');
+    console.log(id);
     $(this).parent().remove();
 
     var colorList = $('#rb-colors').sortable("toArray");
@@ -161,13 +183,11 @@ function farbtastic() {
     sliderRect.width(outerRadius)
     sliderRect.height(outerRadius)
 
-    var sliderWheelRadius = controlWheel.width() / 2 + parseInt(controlWheel.css('borderWidth'))
-    controlWheel.css('left', outerRadius - sliderWheelRadius)
-    controlWheel.css('top' , outerRadius * 3 / 22 - sliderWheelRadius)
-
-    var sliderRectRadius = controlRect.width() / 2 + parseInt(controlRect.css('borderWidth'))
-    controlRect.css('left', - sliderRectRadius)
-    controlRect.css('top' , - sliderRectRadius)
+    printColorWheel();
+    printColorRect('#FF0000');
+    setWheelDeg(colorHue);
+    setRectPos(colorWhite, colorBlack);
+    colorChange();
   }
 
   // do somthing in this function
@@ -175,8 +195,12 @@ function farbtastic() {
     var hwb   = 'hwb(' + colorHue + ',' + colorWhite + ',' + colorBlack + ')';
     var color = w3color(hwb);
     var rgb   = color.toRgbString();
+    var hex   = color.toHexString();
 
     if(cardCursor != null){
+      var id     = cardCursor.attr('id');
+
+      setHexValue(id, hex);
       cardCursor.css('background-color', rgb);
     }
 
