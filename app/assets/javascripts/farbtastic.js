@@ -104,11 +104,13 @@ function farbtastic() {
     var color = w3color(color);
     var id    = 'card-' + (++cardNoRept);
     var card  = $('#rb-color-template').children().clone();
-    var dlt   = $(card.find('[data-delete-btn]').get(0));
+    var cpy   = $(card.find('[data-copy-btn]').get(0));
     var hex   = $(card.find('[data-hex]').get(0));
+    var dlt   = $(card.find('[data-delete-btn]').get(0));
 
     card.attr('id', id);
     card.css('background-color', color.toRgbString());
+    cpy.attr('id', 'dpy-' + id);
     dlt.attr('id', 'dlt-' + id);
     hex.attr('id', 'hex-' + id);
     hex.html(color.toHexString());
@@ -147,7 +149,6 @@ function farbtastic() {
       setWheelDeg(colorHue);
       printColorRect('hsl(' + colorHue + ', 100%, 50%)')
       setRectPos(colorWhite, colorBlack);
-      colorChange();
     }
     console.log('csr', cardCursor);
   }
@@ -197,7 +198,7 @@ function farbtastic() {
     var rgb   = color.toRgbString();
     var hex   = color.toHexString();
 
-    if(cardCursor != null){
+    if (cardCursor != null) {
       var id     = cardCursor.attr('id');
 
       setHexValue(id, hex);
