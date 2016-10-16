@@ -137,9 +137,8 @@ function farbtastic() {
       cardCursor = null;
     }
     else {
-      cardCursor = $(this);
       $(this).addClass('selected');
-      var bg     = w3color(cardCursor.css('background-color'));
+      var bg     = w3color($(this).css('background-color'));
       var hex    = bg.toHexString();
 
       colorHue   = bg.hue;
@@ -149,6 +148,9 @@ function farbtastic() {
       setWheelDeg(colorHue);
       printColorRect('hsl(' + colorHue + ', 100%, 50%)')
       setRectPos(colorWhite, colorBlack);
+      colorChange();
+
+      cardCursor = $(this);
     }
     console.log('csr', cardCursor);
   }
