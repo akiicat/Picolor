@@ -1,0 +1,31 @@
+@import "tools";
+
+$container: 600px;
+$slider: 36px;
+$slider-border: 3px;
+
+.color-container {
+  @include abs-center;
+  width: $container;
+  height: $container;
+  background-color: rgba(51,51,51,.7);
+
+  .color-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .slider-wrapper {
+    @include abs-center;
+  }
+
+  .slider-button {
+    position: absolute;
+    width: $slider;
+    height: $slider;
+    background-color: rgba(0,0,0,0.4);
+    border: $slider-border solid #FFFFFF;
+    border-radius: $slider;
+  }
+}
