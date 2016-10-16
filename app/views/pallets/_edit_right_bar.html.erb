@@ -18,8 +18,11 @@
 
 <div id='rb-color-template' class='rb-container' style='display: none;'>
   <div class='card-color'>
-    <div class='card-hex'><h1 data-hex>#FFFFFF</h1></div>
-    <span class='card-icon r-3 handle'><%= image_tag('resize-v.svg') %></span>
-    <span class='card-icon r-1' data-delete-btn><%= image_tag('close.png') %></span>
+    <div class='card-wrapper'>
+      <span class='card-hex' data-hex></span>
+      <span class='card-icon' data-delete-btn><%= image_tag('close.png') %></span>
+      <span class='card-icon handle'><%= image_tag('resize-v.svg') %></span>
+      <span class='card-icon' data-copy-btn><%= image_tag('clippy.svg') %></span>
+    </div>
   </div>
 </div>
