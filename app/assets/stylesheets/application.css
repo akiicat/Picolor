@@ -13,6 +13,6 @@
  * require_tree .
  *= require swiper.min
  *= require jquery-ui
- *= require primer.scss
+ *= require primer
  *= require_self
  */
