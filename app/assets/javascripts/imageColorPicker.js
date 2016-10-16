@@ -1,7 +1,11 @@
 var canvas_list = new Object();
 
 $(document).ready(function(){
-  $('[data-url][data-id]').each(function(){
+  var area       = $('#dropzone');
+  var cardImage  = $('[data-url][data-id]');
+  var canvasZone = $('#dz-canvas');
+
+  cardImage.each(function(){
     var url = $(this).data('url');
     var id  = $(this).data('id');
 
@@ -9,21 +13,18 @@ $(document).ready(function(){
     createList(id, url, _this);
   });
 
-  $('[data-url][data-id]').click(function(){
+  cardImage.click(function(){
     var id = $(this).data('id');
     loadImage(id);
   });
 
-  $('#dz-canvas').click(function(e) {
+  canvasZone.mousemove(function(e) {
     var canvas = $('#dz-canvas > canvas').get(0);
-    var bgColor = pixelColor(canvas, e.pageX, e.pageY);
+    var bgColor = pixelColor(e, canvas);
 
-    $('body').css('backgroundColor', bgColor);
+    area.css('backgroundColor', bgColor);
     console.log('set bg color: ' + bgColor);
   });
-
-  $('#rb-images').sortable();
-  $('#rb-colors').sortable();
 
   function createList(id, url, _this = null){
     var image = new Image();
@@ -60,11 +61,14 @@ $(document).ready(function(){
     };
     image.src = src;
 
-    $('#dz-canvas').html(canvas);
+    canvasZone.html(canvas);
   }
 
-  function pixelColor(canvas, x, y){
+  function pixelColor(e, canvas){
     var context = canvas.getContext('2d');
+
+    var x = e.pageX;
+    var y = e.pageY;
 
     var srcW = canvas.width;
     var srcH = canvas.height;

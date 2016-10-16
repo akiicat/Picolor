@@ -21,5 +21,17 @@
 //= require dropzone
 //= require ntc
 //= require turbolinks
+//= require w3color
+//= require farbtastic
 //= require_tree .
 //= require bootstrap-sprockets
+
+
+// javascript bug fixed
+Object.size = function(obj) {
+  var size = 0, key;
+  for (key in obj) {
+    if (obj.hasOwnProperty(key)) size++;
+  }
+  return size;
+};

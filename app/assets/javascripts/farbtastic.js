@@ -70,23 +70,54 @@ function farbtastic() {
     if (clickRect) { rectController(e); }
   });
 
-  cardToggle.click(function(e){
-    setColor();
-  });
+  $('#rb-images').sortable({ delay: 70 });
+  $('#rb-colors').sortable({ delay: 70 });
 
-  $('#rb-images').sortable();
-  $('#rb-colors').sortable();
+  cardToggle.each(function(e){
+    var colorList = $('#rb-colors').sortable("toArray");
+    var color = $(this).data('color');
+    var id    = 'card-' + $(this).data('id');
+    var card  = $('#rb-color-template').children().clone();
+    var dlt   = $(card.find('[data-delete-btn]').get(0));
+
+    // card, id, color, length
+    card.attr('id', id);
+    card.css('background-color', color);
+    dlt.attr('id', 'dlt-' + id);
+
+    $(this).replaceWith(card);
+    $('#'    +id).click(setColorCursor);
+    $('#dlt-'+id).click(dltColorCard);
+    $('#color-counter').html(colorList.length);
+  });
 
   $('#rb-append-color').click(function(){
     var colorList = $('#rb-colors').sortable("toArray");
-    console.log(colorList, colorList.length);
-    var color_id = 'card-' + colorList.length;
-    $('#rb-colors').append('<div id="' + color_id + '" class="card-color" style="background-color: white;"></div>')
-    $('#rb-colors').sortable("refresh");
-    $('#'+color_id).click(setColor);
-  })
+    var color = 'rgb(' + Math.floor(Math.random() * 256) + ','
+                       + Math.floor(Math.random() * 256) + ','
+                       + Math.floor(Math.random() * 256) + ')';
+    var id    = 'card-' + colorList.length;
+    var card  = $('#rb-color-template').children().clone();
+    var dlt = $(card.find('[data-delete-btn]').get(0));
 
-  function setColor(){
+    card.attr('id', id);
+    card.css('background-color', color);
+    dlt.attr('id', 'dlt-' + id);
+
+    $('#rb-colors').append(card);
+    $('#rb-colors').sortable("refresh");
+    $('#'    +id).click(setColorCursor);
+    $('#dlt-'+id).click(dltColorCard);
+
+    $('#color-counter').html(colorList.length + 1);
+    $('#right-bar').animate({ scrollTop: $('#right-bar').prop("scrollHeight") }, 300);
+
+
+  })
+  // end script
+
+  // link to color card
+  function setColorCursor() {
     if (cardCursor != null && cardCursor.attr('id') === $(this).attr('id')) {
       cardCursor = null;
     }
@@ -103,10 +134,19 @@ function farbtastic() {
       setRectPos(colorWhite, colorBlack);
       colorChange();
     }
-    console.log(colorHue, colorWhite, colorBlack);
-    console.log(cardCursor);
+    console.log('csr', cardCursor);
   }
-  // end script
+
+  //
+  function dltColorCard() {
+    $(this).parent().remove();
+
+    var colorList = $('#rb-colors').sortable("toArray");
+    $('#color-counter').html(colorList.length);
+
+    console.log('hi');
+    console.log(this);
+  }
 
   // variable initialize
   function colorInit(){
