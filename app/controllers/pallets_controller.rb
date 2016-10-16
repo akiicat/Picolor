@@ -27,12 +27,16 @@ class PalletsController < ApplicationController
   # POST /pallets
   # POST /pallets.json
   def create
-    @pallet = Pallet.new(pallet_params)
-    @pallet.painter_id = current_painter.id
-    byebug
+    @pallet = Pallet.new()
+    @pallet.painter_id    = current_painter.id
+    @pallet.title         = 'Untitle'
+    @pallet.description   = ''
+    @pallet.colors_count  = 5
+    @pallet.colors        = '#223c4e #2e879e #5fcc86 #b3e878 #e5ff87'
+
     respond_to do |format|
       if @pallet.save
-        format.html { redirect_to @pallet, notice: 'Pallet was successfully created.' }
+        format.html { redirect_to edit_pallet_path(@pallet), notice: 'Pallet was successfully created.' }
         format.json { render :show, status: :created, location: @pallet }
       else
         format.html { render :new }
