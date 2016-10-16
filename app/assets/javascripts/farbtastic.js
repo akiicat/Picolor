@@ -110,7 +110,7 @@ function farbtastic() {
 
     card.attr('id', id);
     card.css('background-color', color.toRgbString());
-    cpy.attr('id', 'dpy-' + id);
+    cpy.attr('id', 'cpy-' + id);
     dlt.attr('id', 'dlt-' + id);
     hex.attr('id', 'hex-' + id);
     hex.html(color.toHexString());
@@ -119,6 +119,9 @@ function farbtastic() {
     $('#rb-colors').sortable("refresh");
     $('#'    +id).click(setColorCursor);
     $('#dlt-'+id).click(dltColorCard);
+    $('#cpy-'+id).click(function(){
+      copyToClipboardMsg($('#hex-'+id)[0], 'msg');
+    });
 
     cardCounter = $('#rb-colors').sortable("toArray").length;
     $('#color-counter').html(cardCounter);
