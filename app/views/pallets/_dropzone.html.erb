@@ -1,0 +1,16 @@
+<button id="clickable">Click me to select files</button>
+<div id='dropzone' class=''>
+  <div class="fallback">
+    <input id='myFile' name='file' type='image' multiple/>
+  </div>
+
+  <div id='dz-upload'>
+    <%= image_tag('cloud-storage-uploading-option.svg', class: 'dz-preloader') %>
+  </div>
+
+  <div id='dz-canvas'></div>
+
+  <div id='dz-preview' class='dz-preview'>
+    <%= image_tag('preloader.svg', class: 'dz-preloader') %>
+  </div>
+</div>

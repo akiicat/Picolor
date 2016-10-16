@@ -13,22 +13,7 @@
     </div>
 
     <div id="l-image" role="tabpanel" class="tab-pane">
-      <button id="clickable">Click me to select files</button>
-      <div id='dropzone' class=''>
-        <div class="fallback">
-          <input id='myFile' name='file' type='image' multiple/>
-        </div>
-
-        <div id='dz-upload'>
-          <%= image_tag('cloud-storage-uploading-option.svg', class: 'dz-preloader') %>
-        </div>
-
-        <div id='dz-canvas'></div>
-
-        <div id='dz-preview' class='dz-preview'>
-          <%= image_tag('preloader.svg', class: 'dz-preloader') %>
-        </div>
-      </div>
+      <%= render :partial => 'dropzone' %>
     </div>
     <div role="tabpanel" class="tab-pane" id="messages">c</div>
     <div role="tabpanel" class="tab-pane" id="settings">d</div>
@@ -38,28 +23,7 @@
 </div>
 <div id='color-counter'>0</div>
 <div id='right-bar' class='col-lg-4 right-bar'>
-  <div id='rb-images' class='rb-container'>
-    <% JSON.parse(@pallet.image_url).each_with_index do |url, index| %>
-      <div id="image-<%= index %>" class='card-image' data-id="<%= index %>" data-url="<%= url %>"></div>
-    <% end %>
-  </div>
-
-  <div id='rb-colors' class='rb-container'>
-    <% @pallet.colors.split(" ").each_with_index do |color_hex, index| %>
-      <div data-id="<%= index %>" data-color="<%= color_hex %>">t</div>
-    <% end %>
-  </div>
-
-  <div id='rb-append-color' class='rb-container'>
-    <div style='height: 100px; background-color: white'> +++++ADD COLOR BUTTON+++++ </div>
-  </div>
-
-  <div id='rb-color-template' class='rb-container' style='display: none;'>
-    <div class='card-color'>
-      <div style='height: 100px;'>COLORCURSOR</div>
-      <div data-delete-btn>DELETEDELETEDELETEDELETE</div>
-    </div>
-  </div>
+  <%= render :partial => 'edit_right_bar' %>
 </div>
 
 <%= render 'form', pallet: @pallet %>
