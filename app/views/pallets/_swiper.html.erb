@@ -1,26 +1,18 @@
 <script>
 
 $(document).ready(function(){
-  $('.card-color').each(function() {
+  $('.swiper-card-color').each(function() {
     var hex = $(this).children(".ink").first().val();
     console.log(hex);
     $(this).css("background-color", hex);
-    $(this).find(".label-hex").text(hex);
+    $(this).find(".swiper-label-hex").text(hex);
   });
 
-  $('.label-hex').mouseover(function (){
+  $('.swiper-label-hex').mouseover(function (){
     var text_color  = $(this).css("color");
-
     var hex         = $(this).text();
 
-    //console.log(text_color);
     console.log(hex);
-    // validate hex
-
-    //var n_match     = ntc.name(hex);
-
-    //$(this).parent().children(".bottle").children("img").css("background-color", hex);
-    //$(this).parent().children(".label").text(hex.toUpperCase());
   });
 });
 
@@ -40,27 +32,27 @@ $(window).resize(swiper_resize);
     <%#- Additional required wrapper %>
     <div id='sortableList' class="swiper-wrapper">
         <%#- Slides %>
-        <% if pallet.image_url.present? %>
-          <div class="swiper-slide card-image">
-            <%= image_tag(pallet.image_url, class: "center") %>
-          </div>
+        <% JSON.parse(pallet.image_url).each do |url| %>
+          <% if url.present? %>
+            <div class="swiper-slide swiper-card-image">
+              <%= image_tag(url) %>
+            </div>
+          <% end %>
         <% end %>
 
         <% pallet.colors.split(" ").each do |color_hex| %>
-          <div class="swiper-slide card-color">
+          <div class="swiper-slide swiper-card-color">
             <input class="ink" type="color" style="display: none;" value="<%= color_hex %>"/>
-            <div class="label-wrapper swiper-no-swiping text-center">
-              <div class="label-swiper">
-                <span class="swiper-draggable glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>
-              </div>
-              <div class="label-hex"></div>
+            <div class="swiper-label-wrapper swiper-no-swiping">
+              <span class="swiper-draggable glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>
+              <div class="swiper-label-hex"></div>
             </div>
           </div>
         <% end %>
 
         <% bobbles = (5 - pallet.colors_count) %>
         <% bobbles.times do %>
-          <div class="swiper-slide card-color" style="background-color: #ffffff;">
+          <div class="swiper-slide swiper-card-color" style="background-color: #ffffff;">
             bobble
           </div>
         <% end %>
