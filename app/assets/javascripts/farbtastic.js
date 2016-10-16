@@ -165,15 +165,11 @@ function farbtastic() {
 
   //
   function dltColorCard() {
-    var id = $(this).attr('id');
-    console.log(id);
-    $(this).parent().remove();
+    var id = $(this).attr('id').match(/card-(\d)+/)[0];
+    $('#'+id).remove();
 
     var colorList = $('#rb-colors').sortable("toArray");
     $('#color-counter').html(colorList.length);
-
-    console.log('hi');
-    console.log(this);
   }
 
   // variable initialize
