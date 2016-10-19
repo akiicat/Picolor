@@ -29,10 +29,11 @@ class PalletsController < ApplicationController
   def create
     @pallet = Pallet.new()
     @pallet.painter_id    = current_painter.id
+    @pallet.image_url     = '[]'
     @pallet.title         = 'Untitle'
     @pallet.description   = ''
     @pallet.colors_count  = 5
-    @pallet.colors        = '#223c4e #2e879e #5fcc86 #b3e878 #e5ff87'
+    @pallet.colors        = '#223c4e,#2e879e,#5fcc86,#b3e878,#e5ff87'
 
     respond_to do |format|
       if @pallet.save
@@ -51,6 +52,7 @@ class PalletsController < ApplicationController
     respond_to do |format|
       if @pallet.update(pallet_params)
         format.html { redirect_to @pallet, notice: 'Pallet was successfully updated.' }
+        format.js {}
         format.json { render :show, status: :ok, location: @pallet }
       else
         format.html { render :edit }
