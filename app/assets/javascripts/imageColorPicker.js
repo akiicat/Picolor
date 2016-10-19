@@ -1,21 +1,20 @@
-var canvas_list = new Object();
 
-$(document).ready(function(){
-  var area       = $('#dropzone');
-  var cardImage  = $('[data-url][data-id]');
-  var canvasZone = $('#dz-canvas');
+
+function imageUploader(){
+  var area        = $('#dropzone');
+  var cardImage   = $('[data-id][data-url]');
+  var canvasZone  = $('#dz-canvas');
+  var canvas_list = new Object();
+
+  var imgNoRept   = 0;
+
+  // --------- start script ---------
+  $('#rb-images').sortable({ delay: 70 });
 
   cardImage.each(function(){
     var url = $(this).data('url');
-    var id  = $(this).data('id');
-
-    var _this = $(this);
-    createList(id, url, _this);
-  });
-
-  cardImage.click(function(){
-    var id = $(this).data('id');
-    loadImage(id);
+    $(this).remove();
+    appendImg(url);
   });
 
   canvasZone.mousemove(function(e) {
@@ -23,9 +22,57 @@ $(document).ready(function(){
     var bgColor = pixelColor(e, canvas);
 
     area.css('backgroundColor', bgColor);
-    console.log('set bg color: ' + bgColor);
   });
 
+  $("#dropzone").dropzone({
+    paramName: "image",
+    clickable: "#tab-upload-btn",
+    acceptedFiles: "image/jpeg,image/png,image/gif",
+    thumbnailWidth: null,
+    thumbnailHeight: null,
+    method: "post",
+    url: "https://api.imgur.com/3/upload",
+    headers: {
+      Authorization: "Client-ID 2ee14aa7e5c81e6",
+      'Cache-Control': null,
+      'X-Requested-With': null
+    },
+    dragenter : dragin,
+    dragleave : dragout,
+    drop: dragdrop,
+    processing: uploadProcess,
+    success: uploadSuccess,
+    thumbnail: function(file, data_url){
+      canvas_list['LASTDATAURL'] = data_url;
+    },
+    addedfile: function(file){}
+  });
+  // --------- end script ---------
+
+
+  function appendImg(url){
+    var cardImg = $('#rb-image-template').children().clone();
+    var id  = 'image-' + imgNoRept++;
+    var dlt = $(cardImg.find('[data-delete-btn]').get(0));
+
+    cardImg.attr('id', id);
+    cardImg.attr('data-url', url);
+    dlt.attr('id', 'dlt-' + id);
+
+    createList(id, url, cardImg);
+
+    $('#rb-images').append(cardImg);
+    $('#'    +id).click(function(){ loadImage(id); });
+    $('#dlt-'+id).click(dltImgCard);
+
+    imageCounter();
+
+    $('#rb-images').animate({ scrollTop: $('#rb-images').prop("scrollHeight") }, 240);
+
+    return id;
+  }
+
+  // append to '_this' element default null
   function createList(id, url, _this = null){
     var image = new Image();
     image.onload = function(){
@@ -38,6 +85,7 @@ $(document).ready(function(){
       context.drawImage(this, 0, 0);
 
       canvas_list[id] = canvas.toDataURL();
+
       _this.append(canvas);
     };
     image.onerror = function(){
@@ -48,6 +96,9 @@ $(document).ready(function(){
   }
 
   function loadImage(id){
+    $('#left-bar a[href="#l-image"]').tab('show');
+    $('#dz-upload').hide();
+
     var src = canvas_list[id];
     var canvas  = document.createElement('canvas');
     var context = canvas.getContext('2d');
@@ -87,4 +138,77 @@ $(document).ready(function(){
 
     return pixelcolor;
   }
-})
+
+  function dltImgCard() {
+    var id = $(this).attr('id').match(/image-(\d)+/)[0];
+    console.log(id, $(this));
+    $('#'+id).remove();
+
+    imageCounter();
+  }
+
+  function imageCounter() {
+    var ids = $('#rb-images').sortable("toArray");
+    $('#image-counter').html(ids.length);
+
+    var images = new Array();
+
+    for (var i in ids){
+      if(ids[i]){
+        var url = $('#'+ids[i]).data('url');
+        images.push('"' + url + '"');
+      }
+    }
+
+    $('#form-images input').val('[' + images + ']');
+  }
+
+  // --------- dropzone ---------
+  function dragin(e) { //function for drag into element, just turns the bix X white
+    $(dropzone).addClass('hover');
+  }
+
+  function dragout(e) { //function for dragging out of element
+    $(dropzone).removeClass('hover');
+  }
+
+  function dragdrop(e) {
+    $(dropzone).removeClass('hover');
+  }
+
+  function uploadProcess() {
+    // tab change
+    $('#left-bar a[href="#l-image"]').tab('show');
+
+    $('#dz-upload').hide();
+    $('#dz-canvas').empty();
+
+    $('#dz-preview').show();
+    $(dropzone).css('background-color', 'rgba(0, 0, 0, 0.1)');
+  }
+
+  function uploadSuccess(file, response) {
+    console.log(response.status);
+    console.log(response.data.link);
+
+    $('#dz-preview').hide();
+
+    if(response.success){
+      var url = response.data.link;
+      var id  = appendImg(url, true);
+
+      loadImage('LASTDATAURL');
+
+      $('#right-bar a[href="#r-image-card"]').tab('show');
+      $('#r-tab-content').animate({ scrollTop: $('#r-image-card').prop("scrollHeight") }, 750);
+
+      console.log(canvas_list);
+    }
+    else {
+      $('#dz-upload').show();
+    }
+  }
+}
+
+$(document).ready(imageUploader);
+$(document).on('turbolinks:load', imageUploader);

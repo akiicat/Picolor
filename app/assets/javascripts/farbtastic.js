@@ -1,4 +1,4 @@
-$(document).ready(function(){
+function farbtasticErrorHandle(){
   try {
     farbtastic();
   }
@@ -6,7 +6,7 @@ $(document).ready(function(){
     console.log(e);
     return;
   }
-});
+}
 
 function farbtastic() {
   // canvas variable
@@ -29,13 +29,12 @@ function farbtastic() {
   var sliderMask = $('#sliderMask');
 
   var colorHue = 0;
-  var colorWhite = 1;
-  var colorBlack = 0;
+  var colorWhite = .15;
+  var colorBlack = .85;
 
   var cardToggle = $('[data-color]');
   var cardCursor = null;
   var cardNoRept = 0;
-  var cardCounter = 0;
 
   // start script
   colorInit();
@@ -69,7 +68,6 @@ function farbtastic() {
     if (clickRect) { rectController(e); }
   });
 
-  $('#rb-images').sortable({ delay: 70 });
   $('#rb-colors').sortable({
     delay: 70,
     handle: ".handle"
@@ -82,21 +80,37 @@ function farbtastic() {
     appendCard(color, anime);
   });
 
-  $('#rb-append-color').click(function(){
+  // #rb-append-color, #tab-append-color
+  $('[id$=-append-color]').click(function(){
+    $('#left-bar a[href="#l-farbtastic"]').tab('show');
+    $('#right-bar a[href="#r-color-card"]').tab('show');
+
     if(cardCursor != null) {
       cardCursor.removeClass('selected');
       cardCursor = null;
     }
-    // random color
-    // var color = 'rgb(' + Math.floor(Math.random() * 256) + ','
-    //                    + Math.floor(Math.random() * 256) + ','
-    //                    + Math.floor(Math.random() * 256) + ')';
 
     // now color
     var hwb   = 'hwb('+colorHue+','+colorWhite+','+colorBlack+')';
     var color = w3color(hwb).toRgbString();
+
+    // #rb-append-color for random color
+    if($(this).attr('id') == 'rb-append-color') {
+      color = 'rgb(' + Math.floor(Math.random() * 256) + ','
+                     + Math.floor(Math.random() * 256) + ','
+                     + Math.floor(Math.random() * 256) + ')';
+    }
+
     appendCard(color);
   });
+
+
+  $('#dz-canvas').click(function(){
+    $('#right-bar a[href="#r-color-card"]').tab('show');
+
+    var color = $('#dropzone').css('background-color');
+    appendCard(color);
+  })
   // end script
 
   // append color card to #rb-colors
@@ -123,11 +137,10 @@ function farbtastic() {
       copyToClipboardMsg($('#hex-'+id)[0], 'msg');
     });
 
-    cardCounter = $('#rb-colors').sortable("toArray").length;
-    $('#color-counter').html(cardCounter);
+    colorCounter();
 
     if(anime){
-      $('#right-bar').animate({ scrollTop: $('#right-bar').prop("scrollHeight") }, 240);
+      $('#r-tab-content').animate({ scrollTop: $('#r-color-card').prop("scrollHeight") }, 240);
     }
   }
 
@@ -136,10 +149,8 @@ function farbtastic() {
     if(cardCursor != null) {
       cardCursor.removeClass('selected');
     }
-    if (cardCursor != null && cardCursor.attr('id') === $(this).attr('id')) {
-      cardCursor = null;
-    }
-    else {
+    if (cardCursor == null || cardCursor.attr('id') != $(this).attr('id')) {
+      cardCursor = $(this);
       $(this).addClass('selected');
       var bg     = w3color($(this).css('background-color'));
       var hex    = bg.toHexString();
@@ -151,9 +162,10 @@ function farbtastic() {
       setWheelDeg(colorHue);
       printColorRect('hsl(' + colorHue + ', 100%, 50%)')
       setRectPos(colorWhite, colorBlack);
-      colorChange();
-
-      cardCursor = $(this);
+      colorChange(null);
+    }
+    else {
+      cardCursor = null;
     }
     console.log('csr', cardCursor);
   }
@@ -168,8 +180,24 @@ function farbtastic() {
     var id = $(this).attr('id').match(/card-(\d)+/)[0];
     $('#'+id).remove();
 
-    var colorList = $('#rb-colors').sortable("toArray");
-    $('#color-counter').html(colorList.length);
+    colorCounter();
+  }
+
+  function colorCounter() {
+    var ids = $('#rb-colors').sortable("toArray");
+    $('#color-counter').html(ids.length);
+
+    var colors = new Array();
+
+    for (var i in ids){
+      if(ids[i]){
+        var rgb = $('#'+ids[i]).css('background-color');
+        var hex = w3color(rgb).toHexString().toUpperCase();
+        colors.push(hex);
+      }
+    }
+
+    $('#form-colors input').val(colors);
   }
 
   // variable initialize
@@ -193,17 +221,15 @@ function farbtastic() {
   }
 
   // do somthing in this function
-  function colorChange(){
+  function colorChange(card = cardCursor){
     var hwb   = 'hwb(' + colorHue + ',' + colorWhite + ',' + colorBlack + ')';
     var color = w3color(hwb);
     var rgb   = color.toRgbString();
     var hex   = color.toHexString();
 
-    if (cardCursor != null) {
-      var id     = cardCursor.attr('id');
-
-      setHexValue(id, hex);
-      cardCursor.css('background-color', rgb);
+    if (card != null) {
+      setHexValue(card.attr('id'), hex);
+      card.css('background-color', rgb);
     }
 
     // ------------------------------------------------
@@ -393,3 +419,6 @@ function farbtastic() {
                   + Math.round(rgb.b) + ")";
   }
 }
+
+$(document).ready(farbtasticErrorHandle);
+$(document).on('turbolinks:load', farbtasticErrorHandle);

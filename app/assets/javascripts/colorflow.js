@@ -21,7 +21,7 @@ function initialize() {
     cancel: '',
     axis: "x",
     //animation: 200,
-    placeholder: 'swiper-slide card-color',
+    placeholder: 'swiper-slide swiper-card-color',
 
   }).disableSelection();
 }
