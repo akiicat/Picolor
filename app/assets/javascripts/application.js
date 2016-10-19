@@ -22,6 +22,7 @@
 //= require ntc
 //= require turbolinks
 //= require w3color
+//= require clipboard
 //= require farbtastic
 //= require_tree .
 //= require bootstrap-sprockets
