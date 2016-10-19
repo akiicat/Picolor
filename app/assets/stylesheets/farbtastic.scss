@@ -8,7 +8,6 @@ $slider-border: 3px;
   @include abs-center;
   width: $container;
   height: $container;
-  background-color: rgba(51,51,51,.7);
 
   .color-canvas {
     position: absolute;
