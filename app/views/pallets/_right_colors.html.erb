@@ -1,0 +1,24 @@
+<div id='rb-colors' class='rb-container'>
+  <% @pallet.colors.split(",").each_with_index do |color_hex, index| %>
+    <div data-id="<%= index %>" data-color="<%= color_hex %>"></div>
+  <% end %>
+</div>
+
+<div id='rb-append-color' class='rb-container'>
+  <div class='card-color'>
+    <span class='card-add'>
+      <%= image_tag('dice.png', title: "Add a random color", aria: { hidden: 'true'} , data: { toggle: 'tooltip', placement: 'bottom' }) %>
+    </span>
+  </div>
+</div>
+
+<div id='rb-color-template' class='rb-container' style='display: none;'>
+  <div class='card-color'>
+    <div class='card-wrapper'>
+      <span class='card-hex' data-hex></span>
+      <span class='card-icon' data-delete-btn><%= image_tag('close.png') %></span>
+      <span class='card-icon handle'><%= image_tag('resize-v.svg') %></span>
+      <span class='card-icon' data-copy-btn><%= image_tag('clippy.svg') %></span>
+    </div>
+  </div>
+</div>
