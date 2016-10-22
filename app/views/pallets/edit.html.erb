@@ -1,13 +1,20 @@
+<span id="msg" class="flash">test</span>
+<span id="top-title" class="fix-top"></span>
+<input id="top-title-input" type='text' name='title' class="fix-top-input"/>
+
 <div id='left-bar' class='col-lg-8'>
   <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#l-farbtastic" aria-controls="l-farbtastic" role="tab" data-toggle="tab">Farbtastic</a></li>
-    <li role="presentation"><a href="#l-image" aria-controls="l-image" role="tab" data-toggle="tab">Image</a></li>
-    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+    <li role="presentation" class="active">
+      <a href="#l-farbtastic" aria-controls="l-farbtastic" role="tab" data-toggle="tab">Farbtastic</a>
+    </li>
+    <li role="presentation">
+      <a href="#l-image" aria-controls="l-image" role="tab" data-toggle="tab">Image</a>
+    </li>
+    <span id="tab-append-color" class="glyphicon glyphicon-plus upload-btn" title="Add color from color wheel" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"></span>
+    <span id="tab-upload-btn" class="glyphicon glyphicon-picture upload-btn" title="Pick color from image" aria-hidden="true" data-toggle="tooltip" data-placement="bottom"></span>
   </ul>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
+  <div id='l-tab-content' class="tab-content">
     <div id="l-farbtastic" role="tabpanel" class="tab-pane active">
       <%= render :partial => 'color_wheel' %>
     </div>
@@ -15,20 +22,16 @@
     <div id="l-image" role="tabpanel" class="tab-pane">
       <%= render :partial => 'dropzone' %>
     </div>
-    <div role="tabpanel" class="tab-pane" id="messages">c</div>
-    <div role="tabpanel" class="tab-pane" id="settings">d</div>
   </div>
-
-
 </div>
-<div id='color-counter'>0</div>
+
+
 <div id='right-bar' class='col-lg-4 right-bar'>
   <%= render :partial => 'edit_right_bar' %>
 </div>
 
-<span id="msg"></span><br>
 
-<%= render 'form', pallet: @pallet %>
+<%#= render 'form', pallet: @pallet %>
 
-<%#= link_to 'Show', @pallet %> |
+<%#= link_to 'Show', @pallet %>
 <%#= link_to 'Back', pallets_path %>
