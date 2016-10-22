@@ -9,7 +9,6 @@
 // });
 
 function copyToClipboardMsg(elem, msgElem) {
-  console.log('hi');
   var succeed = copyToClipboard(elem);
   var msg;
   if (!succeed) {
