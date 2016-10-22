@@ -23,16 +23,21 @@
 
 
 .flash {
+  @include fix-top();
   display: none;
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  padding: 3px 11px;
-  border-radius: 6px;
-  border: 0px solid;
-  font-weight: bold;
 }
+
+.fix-top {
+  @include fix-top();
+}
+
+.fix-top-input {
+  @include fix-top();
+  display: none;
+  background-color: #E0E0E0;
+  outline: none;
+}
+
 .form-btn {
   input {
     padding-top: 15px;
@@ -118,5 +123,58 @@
 
 .tab-pane{
   position: relative;
-  height: 800px;
+  height: 100%;
+}
+
+.container {
+  .thumbnail {
+    background-color: #F7F7F7;
+
+    .thumbnail-img {
+      position: relative;
+      height: 240px;
+      & > img {
+        @include abs-center();
+
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+
+  .color-bar {
+    width: 100%;
+    &.bar-32 {
+      height: 32px;
+    }
+    &.bar-20 {
+      height: 20px;
+    }
+  }
+
+  &.bar-32 {
+    height: 32px;
+  }
+
+  .color-chunked {
+    float: left;
+    height: 100%;
+  }
+
+
+  .container-default-page {
+    margin-top: 30%;
+  }
+  .container-main-page {
+    margin-top: 10px;
+  }
+
+  // show
+  .color-info-table {
+    margin-top: 16px;
+
+    tr {
+      height: 32px;
+    }
+  }
 }
