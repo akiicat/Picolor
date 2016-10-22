@@ -1,5 +1,3 @@
-
-
 function imageUploader(){
   var area        = $('#dropzone');
   var cardImage   = $('[data-id][data-url]');
@@ -9,7 +7,10 @@ function imageUploader(){
   var imgNoRept   = 0;
 
   // --------- start script ---------
-  $('#rb-images').sortable({ delay: 70 });
+  $('#rb-images').sortable({
+    delay: 70,
+    stop: imageCounter
+  });
 
   cardImage.each(function(){
     var url = $(this).data('url');
@@ -161,6 +162,10 @@ function imageUploader(){
     }
 
     $('#form-images input').val('[' + images + ']');
+
+    if(ids.length > 5) {
+      flashMsg('Max Images is 5');
+    }
   }
 
   // --------- dropzone ---------
@@ -210,5 +215,5 @@ function imageUploader(){
   }
 }
 
-$(document).ready(imageUploader);
+//$(document).ready(imageUploader);
 $(document).on('turbolinks:load', imageUploader);
