@@ -70,7 +70,8 @@ function farbtastic() {
 
   $('#rb-colors').sortable({
     delay: 70,
-    handle: ".handle"
+    handle: ".handle",
+    stop: colorCounter
   });
 
   cardToggle.each(function(e){
@@ -81,6 +82,7 @@ function farbtastic() {
   });
 
   // #rb-append-color, #tab-append-color
+  // [id$=-append-color]
   $('[id$=-append-color]').click(function(){
     $('#left-bar a[href="#l-farbtastic"]').tab('show');
     $('#right-bar a[href="#r-color-card"]').tab('show');
@@ -116,7 +118,7 @@ function farbtastic() {
   // append color card to #rb-colors
   function appendCard(color, anime = true) {
     var color = w3color(color);
-    var id    = 'card-' + (++cardNoRept);
+    var id    = 'card-' + cardNoRept++;
     var card  = $('#rb-color-template').children().clone();
     var cpy   = $(card.find('[data-copy-btn]').get(0));
     var hex   = $(card.find('[data-hex]').get(0));
@@ -167,7 +169,6 @@ function farbtastic() {
     else {
       cardCursor = null;
     }
-    console.log('csr', cardCursor);
   }
 
   function setHexValue(id, hex) {
@@ -198,6 +199,10 @@ function farbtastic() {
     }
 
     $('#form-colors input').val(colors);
+
+    if(ids.length > 32) {
+      flashMsg('Max Colors is 32');
+    }
   }
 
   // variable initialize
@@ -420,5 +425,5 @@ function farbtastic() {
   }
 }
 
-$(document).ready(farbtasticErrorHandle);
+//$(document).ready(farbtasticErrorHandle);
 $(document).on('turbolinks:load', farbtasticErrorHandle);
