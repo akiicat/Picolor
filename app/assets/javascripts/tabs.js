@@ -9,5 +9,5 @@ function bootstrapFunction(){
   })
 }
 
-$(document).ready(bootstrapFunction);
+//$(document).ready(bootstrapFunction);
 $(document).on('turbolinks:load', bootstrapFunction);
