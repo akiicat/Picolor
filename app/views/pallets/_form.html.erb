@@ -1,42 +1,30 @@
-<%= form_for(pallet) do |f| %>
-  <% if pallet.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(pallet.errors.count, "error") %> prohibited this pallet from being saved:</h2>
-
-      <ul>
-      <% pallet.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
+<%= form_for(pallet, :remote => true, :html => { :id => "edit_form" }) do |f| %>
+  <div id='form_title' class="field preview">
     <%= f.label :title %>
     <%= f.text_field :title %>
   </div>
 
-  <div class="field">
+  <div id='form-images' class="field preview">
     <%= f.label :image_url %>
     <%= f.text_field :image_url %>
   </div>
 
-  <div class="field">
+  <div class="field preview">
     <%= f.label :description %>
     <%= f.text_field :description %>
   </div>
 
-  <div class="field">
+  <div class="field preview">
     <%= f.label :colors_count %>
     <%= f.number_field :colors_count %>
   </div>
 
-  <div class="field">
+  <div id='form-colors' class="field preview">
     <%= f.label :colors %>
     <%= f.text_field :colors %>
   </div>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <span class="form-btn">
+    <%= f.submit 'Save', title: "Or auto save per 30 seconds.", aria: {hidden:"true"}, data: {toggle:"tooltip", placement:"bottom"} %>
+  </span>
 <% end %>
