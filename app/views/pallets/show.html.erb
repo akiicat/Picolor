@@ -1,57 +1,60 @@
-<% @pallet.colors.split(" ").each do |color_hex| %>
-<% end %>
-
 <%= render :partial => 'swiper', locals: {pallet: @pallet} %>
 
 <div class="container">
+  <table class='color-info-table'>
+    <col width="72px"/>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Title:</strong>
+        </td>
+        <td>
+          <%= @pallet.title %>
+        </td>
+      </tr>
 
-  <p id="notice"><%= notice %></p>
+      <tr>
+        <td>
+          <strong>Author:</strong>
+        </td>
+        <td>
+          <%= @pallet.painter.username %>
+        </td>
+      </tr>
 
-  <p>
-    <strong>Title:</strong>
-    <%= @pallet.title %>
-  </p>
+      <tr>
+        <td>
+          <strong>Image:</strong>
+        </td>
+        <td>
+          <%= @pallet.image_url %>
+        </td>
+      </tr>
 
-  <p>
-    <strong>Image:</strong>
-    <%= @pallet.image_url %>
-  </p>
+      <tr>
+        <td>
+          <strong>Colors:</strong>
+        </td>
+        <td>
+          <div class='color-bar bar-32'>
+            <% @pallet.colors.split(',').each do |hex| %>
+              <div class='color-chunked' style="width: 32px; background-color: <%= hex %>"></div>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <p>
-    <strong>Description:</strong>
-    <%= @pallet.description %>
-  </p>
-
-  <p>
-    <strong>Colors count:</strong>
-    <%= @pallet.colors_count %>
-  </p>
-
-  <p>
-    <strong>Colors:</strong>
-    <%= @pallet.colors %>
-  </p>
-
-
-  <% @pallet.colors.split(" ").each do |color_hex| %>
+  <% @pallet.colors.split(",").each do |color_hex| %>
     <div class="row" style="margin-top: 50px; background-color: white;">
       <div class="ink-well col-md-3">
         <%= image_tag("inkBottle.svg", :style => "width: 100%; background-color: #{color_hex}") %>
       </div>
       <div class="col-md-offset-1 col-md-8">
-        <h1 style="padding: 30px 0px;"><%= color_hex %> 白色</h1>
+        <h1 style="padding: 30px 0px;"><%= color_hex %></h1>
         <%= image_tag("handWriting.svg", :style => "width: 100%; background-color: #{color_hex}") %>
       </div>
     </div>
   <% end %>
-
-
 </div>
-
-<%= link_to 'Edit', edit_pallet_path(@pallet) %> |
-<%= link_to 'Back', pallets_path %>
-<input class="ink-water" type="color" id="colorChoice" >
-
-<script>
-
-</script>
