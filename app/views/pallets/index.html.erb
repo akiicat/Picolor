@@ -1,36 +1,46 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Pallets</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Colors count</th>
-      <th>Colors</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
+<div class='container'>
+  <div class='row container-main-page'>
     <% @pallets.each do |pallet| %>
-      <tr>
-        <td><%= pallet.painter.username %></td>
-        <td><%= pallet.title %></td>
-        <td><%= pallet.image_url %></td>
-        <td><%= pallet.description %></td>
-        <td><%= pallet.colors_count %></td>
-        <td><%= pallet.colors %></td>
-        <td><%= link_to 'Show', pallet %></td>
-        <td><%= link_to 'Edit', edit_pallet_path(pallet) %></td>
-        <td><%= link_to 'Destroy', pallet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <% colors = pallet.colors.split(",") %>
+
+          <%= link_to pallet, role: 'button' do %>
+            <div class='thumbnail-img'>
+                <% url = JSON.parse(pallet.image_url).first %>
+                <% if url %>
+                  <%= image_tag url  %>
+                <% else %>
+                  <% colors[0..4].each do |color| %>
+                    <div class='color-chunked' style="width: 20%; background-color: <%= color %>"></div>
+                  <% end %>
+                <% end %>
+            </div>
+
+            <% width  = (100.0 / colors[0..15].count).to_s + '%' %>
+            <div class='color-bar bar-20'>
+              <% colors[0..15].each do |color| %>
+                <div class='color-chunked' style="width: <%= width %>; background-color: <%= color %>"></div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <div class="caption">
+            <h3><%= pallet.title %></h3>
+            <p>A pallet by <%= pallet.painter.username %></p>
+            <p>
+              <%= link_to 'Edit', edit_pallet_path(pallet), class: 'btn btn-primary', role: 'button' %>
+              <%= link_to 'Delete', pallet, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', role: 'button' %>
+            </p>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  </div>
+  <% if @pallets.count == 0 %>
+    <div class='container-default-page'>
+      <h1 class='text-center'>You do not have any pallet, <%= link_to 'create one', pallets_path, method: :post %>.</h1>
+    </div>
+  <% end %>
 
-<br>
-
-<%= link_to 'Create Pallet', pallets_path, method: :post %>
+</div>
