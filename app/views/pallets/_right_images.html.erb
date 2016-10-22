@@ -1,0 +1,11 @@
+<div id='rb-images' class='rb-container'>
+  <% JSON.parse(@pallet.image_url).each_with_index do |url, index| %>
+    <div data-id="<%= index %>" data-url="<%= url %>"></div>
+  <% end %>
+</div>
+
+<div id='rb-image-template' clarr='rb-container' style='display: none;'>
+  <div class='card-image' data-append-canvas>
+    <span class='card-icon' data-delete-btn><%= image_tag('close.png') %></span>
+  </div>
+</div>

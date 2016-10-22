@@ -1,28 +1,22 @@
-<div id='rb-images' class='rb-container'>
-  <% JSON.parse(@pallet.image_url).each_with_index do |url, index| %>
-    <div id="image-<%= index %>" class='card-image' data-id="<%= index %>" data-url="<%= url %>"></div>
-  <% end %>
-</div>
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+    <a href="#r-color-card" aria-controls="r-color-card" role="tab" data-toggle="tab">
+      Colors <span id='color-counter' class="badge">0</span>
+    </a>
+  </li>
+  <li role="presentation">
+    <a href="#r-image-card" aria-controls="r-image-card" role="tab" data-toggle="tab">
+      Images  <span id='image-counter' class="badge">0</span>
+    </a>
+  </li>
+</ul>
 
-<div id='rb-colors' class='rb-container'>
-  <% @pallet.colors.split(" ").each_with_index do |color_hex, index| %>
-    <div data-id="<%= index %>" data-color="<%= color_hex %>">t</div>
-  <% end %>
-</div>
-
-<div id='rb-append-color' class='rb-container'>
-  <div class='card-color'>
-    <span class='card-add'><%= image_tag('add.svg') %></span>
+<div id='r-tab-content' class="tab-content">
+  <div id="r-color-card" role="tabpanel" class="tab-pane active">
+    <%= render :partial => 'right_colors' %>
   </div>
-</div>
 
-<div id='rb-color-template' class='rb-container' style='display: none;'>
-  <div class='card-color'>
-    <div class='card-wrapper'>
-      <span class='card-hex' data-hex></span>
-      <span class='card-icon' data-delete-btn><%= image_tag('close.png') %></span>
-      <span class='card-icon handle'><%= image_tag('resize-v.svg') %></span>
-      <span class='card-icon' data-copy-btn><%= image_tag('clippy.svg') %></span>
-    </div>
+  <div id="r-image-card" role="tabpanel" class="tab-pane">
+    <%= render :partial => 'right_images' %>
   </div>
 </div>
