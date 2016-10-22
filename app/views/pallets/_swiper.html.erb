@@ -16,15 +16,6 @@ $(document).ready(function(){
   });
 });
 
-function swiper_resize() {
-  var swiper_height = $(window).height() - 250;
-  $('.swiper-container').height(swiper_height);
-  console.log($(window).height());
-}
-
-$(document).ready(swiper_resize);
-$(window).resize(swiper_resize);
-
 </script>
 
 <%#- Slider main container %>
@@ -35,25 +26,26 @@ $(window).resize(swiper_resize);
         <% JSON.parse(pallet.image_url).each do |url| %>
           <% if url.present? %>
             <div class="swiper-slide swiper-card-image">
+              <%= link_to(url, url) %>
               <%= image_tag(url) %>
             </div>
           <% end %>
         <% end %>
 
-        <% pallet.colors.split(" ").each do |color_hex| %>
+        <% pallets = pallet.colors.split(",") %>
+        <% pallets.each do |color_hex| %>
           <div class="swiper-slide swiper-card-color">
             <input class="ink" type="color" style="display: none;" value="<%= color_hex %>"/>
             <div class="swiper-label-wrapper swiper-no-swiping">
-              <span class="swiper-draggable glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>
+              <%#<span class="swiper-draggable glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span>%>
               <div class="swiper-label-hex"></div>
             </div>
           </div>
         <% end %>
 
-        <% bobbles = (5 - pallet.colors_count) %>
+        <% bobbles = (5 - pallets.count) %>
         <% bobbles.times do %>
           <div class="swiper-slide swiper-card-color" style="background-color: #ffffff;">
-            bobble
           </div>
         <% end %>
     </div>
