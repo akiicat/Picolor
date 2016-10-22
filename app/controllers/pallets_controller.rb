@@ -2,12 +2,12 @@ class PalletsController < ApplicationController
   layout 'pallet'
 
   before_action :set_pallet, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_painter!
+  before_action :authenticate_painter!, except: [:index, :show, :edit]
 
   # GET /pallets
   # GET /pallets.json
   def index
-    @pallets = Pallet.all
+    @pallets = Pallet.where(:painter_id => current_painter)
   end
 
   # GET /pallets/1
@@ -28,12 +28,18 @@ class PalletsController < ApplicationController
   # POST /pallets.json
   def create
     @pallet = Pallet.new()
+
+    if params[:fork_id]
+      pallet = Pallet.find(params[:fork_id])
+      @pallet.image_url   = pallet.image_url
+      @pallet.colors      = pallet.colors
+    else
+      @pallet.image_url   = '[]'
+      @pallet.colors      = '#223c4e,#2e879e,#5fcc86,#b3e878,#e5ff87'
+    end
+
     @pallet.painter_id    = current_painter.id
-    @pallet.image_url     = '[]'
-    @pallet.title         = 'Untitle'
-    @pallet.description   = ''
-    @pallet.colors_count  = 5
-    @pallet.colors        = '#223c4e,#2e879e,#5fcc86,#b3e878,#e5ff87'
+    @pallet.title         = 'Untitled'
 
     respond_to do |format|
       if @pallet.save
@@ -49,13 +55,22 @@ class PalletsController < ApplicationController
   # PATCH/PUT /pallets/1
   # PATCH/PUT /pallets/1.json
   def update
+    args = pallet_params
+    images = JSON.parse(args[:image_url])
+    colors = args[:colors].split(',')
+    args[:title] = 'Untitled' if args[:title].empty?
+    args[:image_url] = images[0..4].to_json if images.count > 5
+    args[:colors] = (colors + generate_colors(5 - colors.count)).join(',') if colors.count < 5
+    args[:colors] = colors[0..31].join(',') if colors.count > 32
+
     respond_to do |format|
-      if @pallet.update(pallet_params)
+      if current_painter.id == @pallet.painter_id and @pallet.update(args)
         format.html { redirect_to @pallet, notice: 'Pallet was successfully updated.' }
-        format.js {}
+        format.js {}# render json: @pallet, status: :ok }
         format.json { render :show, status: :ok, location: @pallet }
       else
         format.html { render :edit }
+        format.js { render json: @pallet.colors, status: :error }
         format.json { render json: @pallet.errors, status: :unprocessable_entity }
       end
     end
@@ -80,5 +95,11 @@ class PalletsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def pallet_params
       params.require(:pallet).permit(:title, :image_url, :description, :colors_count, :colors)
+    end
+
+    def generate_colors(number = 5)
+      rtn = Array.new
+      number.times { rtn.push('#' + SecureRandom.hex[0..5]) }
+      return rtn
     end
 end
