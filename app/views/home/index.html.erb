@@ -1,0 +1,41 @@
+<div class='container'>
+  <div class='row container-main-page'>
+    <% @pallets.each do |pallet| %>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <% colors = pallet.colors.split(",") %>
+
+          <%= link_to pallet, role: 'button' do %>
+            <div class='thumbnail-img'>
+                <% url = JSON.parse(pallet.image_url).first %>
+                <% if url %>
+                  <%= image_tag url  %>
+                <% else %>
+                  <% colors[0..4].each do |color| %>
+                    <div class='color-chunked' style="width: 20%; background-color: <%= color %>"></div>
+                  <% end %>
+                <% end %>
+            </div>
+
+            <% width  = (100.0 / colors[0..15].count).to_s + '%' %>
+            <div class='color-bar bar-20'>
+              <% colors[0..15].each do |color| %>
+                <div class='color-chunked' style="width: <%= width %>; background-color: <%= color %>"></div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <div class="caption">
+            <h3><%= pallet.title %></h3>
+            <p>A color pallet by <%= pallet.painter.username %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <% if @pallets.count == 0 %>
+    <div class='container-default-page'>
+      <h1 class='text-center'>You do not have any color pallet, <%= link_to 'create one', pallets_path, method: :post %>.</h1>
+    </div>
+  <% end %>
+</div>
