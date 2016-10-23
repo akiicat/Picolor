@@ -28,6 +28,7 @@
           <div class="caption">
             <h3><%= pallet.title %></h3>
             <p>A pallet by <%= pallet.painter.username %></p>
+            <p>Last update: <%= pallet.updated_at.strftime('%Y/%m/%d') %></p>
             <p>
               <%= link_to 'Edit', edit_pallet_path(pallet), class: 'btn btn-primary', role: 'button' %>
               <%= link_to 'Delete', pallet, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', role: 'button' %>
@@ -39,7 +40,7 @@
   </div>
   <% if @pallets.count == 0 %>
     <div class='container-default-page'>
-      <h1 class='text-center'>You do not have any pallet, <%= link_to 'create one', pallets_path, method: :post %>.</h1>
+      <h1 class='text-center'>You do not have any color pallet, <%= link_to 'create one', pallets_path, method: :post %>.</h1>
     </div>
   <% end %>
 

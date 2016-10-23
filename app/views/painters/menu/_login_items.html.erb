@@ -1,5 +1,5 @@
 <% if painter_signed_in? %>
-  <%= link_to('Logout', destroy_painter_session_path, :method => :delete) %>
+  <%= link_to('Sign out', destroy_painter_session_path, :method => :delete) %>
 <% else %>
-  <%= link_to('Login', new_painter_session_path)  %>
+  <%= link_to('Sign in', new_painter_session_path)  %>
 <% end %>
