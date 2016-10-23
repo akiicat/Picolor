@@ -1,0 +1,5 @@
+<% if painter_signed_in? %>
+  <%= link_to 'Picolor', pallets_path, class: 'navbar-brand' %>
+<% else %>
+  <%= link_to 'Picolor', root_path, class: 'navbar-brand' %>
+<% end %>
