@@ -1,0 +1,54 @@
+@import "tools";
+
+.container {
+  .thumbnail {
+    background-color: #F7F7F7;
+
+    .thumbnail-img {
+      position: relative;
+      height: 240px;
+      & > img {
+        @include abs-center();
+
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+
+  .color-bar {
+    width: 100%;
+    &.bar-32 {
+      height: 32px;
+    }
+    &.bar-20 {
+      height: 20px;
+    }
+  }
+
+  &.bar-32 {
+    height: 32px;
+  }
+
+  .color-chunked {
+    float: left;
+    height: 100%;
+  }
+
+
+  .container-default-page {
+    margin-top: 30%;
+  }
+  .container-main-page {
+    margin-top: 10px;
+  }
+
+  // show
+  .color-info-table {
+    margin-top: 16px;
+
+    tr {
+      height: 32px;
+    }
+  }
+}
