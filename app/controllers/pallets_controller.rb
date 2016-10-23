@@ -2,12 +2,12 @@ class PalletsController < ApplicationController
   layout 'pallet'
 
   before_action :set_pallet, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_painter!, except: [:index, :show, :edit]
+  before_action :authenticate_painter!, except: [:show, :edit]
 
   # GET /pallets
   # GET /pallets.json
   def index
-    @pallets = Pallet.where(:painter_id => current_painter)
+    @pallets = Pallet.where(:painter_id => current_painter).order(updated_at: :desc)
   end
 
   # GET /pallets/1
@@ -35,7 +35,7 @@ class PalletsController < ApplicationController
       @pallet.colors      = pallet.colors
     else
       @pallet.image_url   = '[]'
-      @pallet.colors      = '#223c4e,#2e879e,#5fcc86,#b3e878,#e5ff87'
+      @pallet.colors      = generate_colors(5).join(',')
     end
 
     @pallet.painter_id    = current_painter.id
