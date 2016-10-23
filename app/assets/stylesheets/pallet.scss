@@ -11,7 +11,7 @@
  * It is generally better to create a new file per style scope.
  *
  * require primer
- * require_self
+ *= require_self
  *= require swiper
  *= require farbtastic
  *= require imageColorPicker
@@ -101,12 +101,6 @@
 .badge {
   background-color: #E0E0E0;
   color: black;
-}
-
-.row1 {
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
-  box-shadow: 0 1px 3px rgba(0,0,0,.25);
-  padding: 20px 0px;
 }
 
 // overwrite bootstrap navbar margin
