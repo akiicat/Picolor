@@ -37,7 +37,7 @@ function autoSave(){
       },
       error: function(data){
         if(user_save){
-          flashMsg('Error');
+          flashMsg('Sign in?');
         }
         user_save = false;
       }
